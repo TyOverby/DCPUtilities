@@ -1,5 +1,7 @@
 package com.prealpha.util;
 
+import com.prealpha.compiler.Operator;
+
 import java.nio.charset.Charset;
 
 /**
@@ -32,8 +34,8 @@ public class PrintUtilities {
 
     public static String convertOp(char value){
         StringBuilder sb = new StringBuilder(convertBin(value).replace(" ",""));
-        sb.insert(6," ");
-        sb.insert(6+6+1," ");
+        sb.insert(Operator.A_SIZE," ");
+        sb.insert(Operator.A_SIZE+Operator.B_SIZE+1," ");
 
         return sb.toString();
     }
