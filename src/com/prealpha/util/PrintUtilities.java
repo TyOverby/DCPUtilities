@@ -1,5 +1,7 @@
 package com.prealpha.util;
 
+import java.nio.charset.Charset;
+
 /**
  * User: Ty
  * Date: 7/9/12
@@ -19,11 +21,35 @@ public class PrintUtilities {
         return (int) value + "";
     }
 
+    public static String convertBin(char value){
+        StringBuilder sb = new StringBuilder(Integer.toBinaryString(value));
+        while(sb.length()<16){
+            sb.insert(0,"0");
+        }
+        sb.insert(8," ");
+        return sb.toString();
+    }
+
+    public static String convertOp(char value){
+        StringBuilder sb = new StringBuilder(convertBin(value).replace(" ",""));
+        sb.insert(6," ");
+        sb.insert(6+6+1," ");
+
+        return sb.toString();
+    }
+
+
+    public static void printHex(char value){
+        System.out.println(convertHex(value));
+    }
     public static void printDec(char value){
         System.out.println(convertDec(value));
     }
-    public static void printHex(char value){
-        System.out.println(convertHex(value));
+    public static void printBin(char value){
+        System.out.println(convertBin(value));
+    }
+    public static void printOp(char value){
+        System.out.println(convertOp(value));
     }
     
     public static String stripLiteral(String input){
