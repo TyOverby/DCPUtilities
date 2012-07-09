@@ -46,6 +46,12 @@ public class Operator {
 
         opMap.put(Op.IFB,(char) 0x10);
         opMap.put(Op.IFC,(char) 0x11);
+        opMap.put(Op.IFE,(char) 0x12);
+        opMap.put(Op.IFN,(char) 0x13);
+        opMap.put(Op.IFG,(char) 0x14);
+        opMap.put(Op.IFA,(char) 0x15);
+        opMap.put(Op.IFL,(char) 0x15);
+        opMap.put(Op.IFU,(char) 0x15);
     }
 
     public static char makeInstruction(char operation, char a, char b){
@@ -58,6 +64,25 @@ public class Operator {
         return result;
     }
 
+    public static boolean hasOperator(String input){
+        for(Op op:opMap.keySet()){
+            return (op.toString().toLowerCase().equals(input.toLowerCase()));
+        }
+        return false;
+    }
+    
+    public static char getOpCode(Op op){
+        return opMap.get(op);
+    }
+    public static Character getOpCode(String opName){
+        for(Op op:opMap.keySet()){
+            if(op.toString().toLowerCase().equals(opName.toLowerCase())){
+                return opMap.get(op);
+            }
+        }
+        return null;
+    }
+    
     public static Map<Op, Character> getOpMap(){
         return opMap;
     }
