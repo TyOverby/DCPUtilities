@@ -1,6 +1,7 @@
-import com.prealpha.compiler.Operator;
-import com.prealpha.compiler.Operator.Op;
-import static com.prealpha.compiler.Operator.Op.*;
+import com.prealpha.data.Pack;
+import com.prealpha.info.Builder;
+import com.prealpha.info.Operator;
+import com.prealpha.info.Value;
 import org.junit.Test;
 
 import static com.prealpha.util.PrintUtilities.*;
@@ -51,22 +52,31 @@ public class Playground {
         printOp(d);
     }
 
-    //@Test
+    @Test
     public void test3(){
         // SET PC, PC
         {
-            char op = 0x01; // SET
-            char a = 0x1c;  // PC
-            char b = 0x18;  // POP
+            Pack op = getOp("SUB");
+            Pack b  = getVal("X");
+            Pack a  = getVal("0");
 
-            char expected = 0x6381;
-            char result = Operator.makeInstruction(op,a,b);
-
+            char expected = 0xac63;
+            char result = Builder.makeInstruction(op,b,a);
+            
+            System.out.println("[expected]");
             printHex(expected);
             printOp(expected);
 
+            System.out.println("\n[actual]");
             printHex(result);
             printOp(result);
         }
+    }
+
+    private static Pack getOp(String id){
+        return Operator.operators.get(id);
+    }
+    private static Pack getVal(String id){
+        return Value.values.get(id);
     }
 }

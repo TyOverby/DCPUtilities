@@ -1,9 +1,9 @@
-import com.prealpha.compiler.Operator;
-import com.prealpha.compiler.Operator.Op;
-import static com.prealpha.compiler.Operator.Op.*;
+import com.prealpha.data.Pack;
+import com.prealpha.info.Builder;
+import com.prealpha.info.Operator;
+import com.prealpha.info.Value;
 import org.junit.Test;
 
-import static com.prealpha.util.PrintUtilities.printOp;
 import static junit.framework.Assert.assertEquals;
 
 public class OperatorTest{
@@ -11,37 +11,40 @@ public class OperatorTest{
     public void makeInstructionTest(){
         // SET PC, PC
         {
-            char op = 0x01; // SET
-            char b = 0x1c;  // PC
-            char a = 0x1c;  // PC
+            Pack op = getOp("SET");
+            Pack b  = getVal("PC");
+            Pack a  = getVal("PC");
 
             char expected = 0x7381;
-            char result = Operator.makeInstruction(op,b,a);
+            char result = Builder.makeInstruction(op, b, a);
             assertEquals(expected, result);
         }
 
-        // SET PC, POP
         {
-            char op = 0x01; // SET
-            char b = 0x1c;  // PC
-            char a = 0x18;  // POP
-
-
+            Pack op = getOp("SET");
+            Pack b  = getVal("PC");
+            Pack a  = getVal("PUSH/POP");
 
             char expected = 0x6381;
-            char result = Operator.makeInstruction(op,b,a);
+            char result = Builder.makeInstruction(op,b,a);
             assertEquals(expected, result);
         }
-        
-//        // HWN A
-//        {
-//            Op op = HWN;
-//            char a = 0x2; // A
-//            char b = 0x0; // Leave blank
-//
-//            char expected = 0x0a00;
-//            char result = Operator.makeInstruction(op,a,b);
-//            assertEquals(expected, result);
-//        }
+
+        {
+            Pack op = getOp("SUB");
+            Pack b  = getVal("X");
+            Pack a  = getVal("0");
+
+            char expected = 0xac63;
+            char result = Builder.makeInstruction(op,b,a);
+            assertEquals(expected, result);
+        }
+    }
+
+    private static Pack getOp(String id){
+        return Operator.operators.get(id);
+    }
+    private static Pack getVal(String id){
+        return Value.values.get(id);
     }
 }

@@ -1,6 +1,7 @@
 package com.prealpha.data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -8,7 +9,7 @@ import java.util.List;
  * Date: 7/9/12
  * Time: 8:46 AM
  */
-public class Keeper<K extends Pack> {
+public class Keeper<K extends Pack> implements Iterable<K>{
     private List<K> packList = new ArrayList<K>(50);
 
     public Pack get(String identifier){
@@ -19,6 +20,7 @@ public class Keeper<K extends Pack> {
         }
         return null;
     }
+    
     public Pack get(char code){
         for(Pack p: packList){
             if(p.getCode()==code){
@@ -32,4 +34,8 @@ public class Keeper<K extends Pack> {
         packList.add(pack);
     }
 
+    @Override
+    public Iterator<K> iterator() {
+        return packList.iterator();
+    }
 }

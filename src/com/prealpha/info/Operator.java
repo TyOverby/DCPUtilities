@@ -1,10 +1,6 @@
-package com.prealpha.compiler;
+package com.prealpha.info;
 import com.prealpha.data.Keeper;
 import com.prealpha.data.Pack;
-import com.sun.org.apache.bcel.internal.generic.JSR;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * User: Ty
@@ -12,7 +8,11 @@ import java.util.Map;
  * Time: 4:54 AM
  */
 public class Operator {
-    private static class OperatorPack extends Pack{
+    public static final int TOTAL_SIZE = 16;
+    public static final int OP_SIZE = 5;
+    public static final int A_SIZE = 6;
+    public static final int B_SIZE = 5;
+    public static class OperatorPack extends Pack{
         private final String identifier;
         private final char code;
         private final int cycles;
@@ -41,7 +41,9 @@ public class Operator {
             return this.cycles;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
-    private static final Keeper values = new Keeper();
+
+    public static final Keeper operators = new Keeper();
+
     static{
         add("SET", 0x01, 1);
 
@@ -72,20 +74,20 @@ public class Operator {
         // Specials
         addSpecial("JSR", 0x01, 3);
 
-        addSpecial("INT",0x08, 4);
-        addSpecial("ING",0x09, 1);
-        addSpecial("INS",0x0a, 1);
+        addSpecial("INT", 0x08, 4);
+        addSpecial("ING", 0x09, 1);
+        addSpecial("INS", 0x0a, 1);
 
-        addSpecial("HWN",0x10, 2);
-        addSpecial("HWQ",0x11, 4);
-        addSpecial("HWI",0x12, 4);
+        addSpecial("HWN", 0x10, 2);
+        addSpecial("HWQ", 0x11, 4);
+        addSpecial("HWI", 0x12, 4);
     }
 
     private static void add(String ident, int code, int cycles){
-        values.add(new OperatorPack(ident, (char) code, cycles, false));
+        operators.add(new OperatorPack(ident, (char) code, cycles, false));
     }
 
     private static void addSpecial(String ident, int code, int cycles){
-        values.add(new OperatorPack(ident, (char) code, cycles, true));
+        operators.add(new OperatorPack(ident, (char) code, cycles, true));
     }
 }

@@ -1,8 +1,6 @@
 package com.prealpha.util;
 
-import com.prealpha.compiler.Operator;
-
-import java.nio.charset.Charset;
+import com.prealpha.info.Operator;
 
 /**
  * User: Ty
