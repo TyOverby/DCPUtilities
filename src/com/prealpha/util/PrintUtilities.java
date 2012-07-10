@@ -40,7 +40,6 @@ public class PrintUtilities {
         return sb.toString();
     }
 
-
     public static void printHex(char value){
         System.out.println(convertHex(value));
     }
