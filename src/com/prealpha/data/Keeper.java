@@ -8,12 +8,12 @@ import java.util.List;
  * Date: 7/9/12
  * Time: 8:46 AM
  */
-public class Keeper {
-    private List<Pack> packList = new ArrayList<Pack>(50);
+public class Keeper<K extends Pack> {
+    private List<K> packList = new ArrayList<K>(50);
 
     public Pack get(String identifier){
         for(Pack p: packList){
-            if(p.identifier.toLowerCase().equals(identifier)){
+            if(p.getIdentifier().toLowerCase().equals(identifier.toLowerCase())){
                 return p;
             }
         }
@@ -21,19 +21,15 @@ public class Keeper {
     }
     public Pack get(char code){
         for(Pack p: packList){
-            if(p.code==code){
+            if(p.getCode()==code){
                 return p;
             }
         }
         return null;
     }
     
-    public void add(Pack pack){
+    public void add(K pack){
         packList.add(pack);
-    }
-
-    public void add(String Identifier, char code, Pack.Type type){
-        packList.add(new Pack(Identifier,code,type));
     }
 
 }
