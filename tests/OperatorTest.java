@@ -1,5 +1,5 @@
+import com.prealpha.compiler.Builder;
 import com.prealpha.data.Pack;
-import com.prealpha.info.Builder;
 import com.prealpha.info.Operator;
 import com.prealpha.info.Value;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class OperatorTest{
             Pack a  = getVal("0");
 
             char expected = 0xac63;
-            char result = Builder.makeInstruction(op,b,a);
+            char result = Builder.makeInstruction(op, b, a);
             assertEquals(expected, result);
         }
     }

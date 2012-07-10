@@ -1,6 +1,8 @@
-package com.prealpha.info;
+package com.prealpha.compiler;
 
 import com.prealpha.data.Pack;
+import com.prealpha.info.Operator;
+import com.prealpha.info.Value;
 
 /**
  * User: Ty
