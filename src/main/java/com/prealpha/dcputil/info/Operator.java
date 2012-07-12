@@ -1,6 +1,7 @@
-package com.prealpha.info;
-import com.prealpha.data.Keeper;
-import com.prealpha.data.Pack;
+package com.prealpha.dcputil.info;
+
+import com.prealpha.dcputil.data.Keeper;
+import com.prealpha.dcputil.data.Pack;
 
 /**
  * User: Ty
@@ -12,7 +13,7 @@ public class Operator {
     public static final int OP_SIZE = 5;
     public static final int A_SIZE = 6;
     public static final int B_SIZE = 5;
-    public static class OperatorPack extends Pack{
+    public static class OperatorPack extends Pack {
         private final String identifier;
         private final char code;
         private final int cycles;
@@ -42,7 +43,7 @@ public class Operator {
         }
     }
 
-    public static final Keeper operators = new Keeper();
+    public static final Keeper<OperatorPack> operators = new Keeper<OperatorPack>();
 
     static{
         add("SET", 0x01, 1);

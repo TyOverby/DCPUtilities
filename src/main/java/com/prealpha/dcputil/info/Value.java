@@ -1,7 +1,8 @@
-package com.prealpha.info;
+package com.prealpha.dcputil.info;
 
-import com.prealpha.data.Keeper;
-import com.prealpha.data.Pack;
+
+import com.prealpha.dcputil.data.Keeper;
+import com.prealpha.dcputil.data.Pack;
 
 /**
  * User: Ty
@@ -9,7 +10,7 @@ import com.prealpha.data.Pack;
  * Time: 8:39 AM
  */
 public class Value {
-    public static class ValuePack extends Pack{
+    public static class ValuePack extends Pack {
         private final String identifier;
         private final char code;
         private final int cycles;

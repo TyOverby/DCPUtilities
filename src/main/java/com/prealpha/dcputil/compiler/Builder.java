@@ -1,8 +1,8 @@
-package com.prealpha.compiler;
+package com.prealpha.dcputil.compiler;
 
-import com.prealpha.data.Pack;
-import com.prealpha.info.Operator;
-import com.prealpha.info.Value;
+import com.prealpha.dcputil.data.Pack;
+import com.prealpha.dcputil.info.Operator;
+import com.prealpha.dcputil.info.Value;
 
 /**
  * User: Ty

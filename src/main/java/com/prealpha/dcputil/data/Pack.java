@@ -1,4 +1,4 @@
-package com.prealpha.data;
+package com.prealpha.dcputil.data;
 
 /**
  * User: Ty

@@ -1,10 +1,12 @@
-import com.prealpha.compiler.Builder;
-import com.prealpha.data.Pack;
-import com.prealpha.info.Operator;
-import com.prealpha.info.Value;
+package com.prealpha.dcputil;
+
+import com.prealpha.dcputil.compiler.Builder;
+import com.prealpha.dcputil.data.Pack;
+import com.prealpha.dcputil.info.Operator;
+import com.prealpha.dcputil.info.Value;
 import org.junit.Test;
 
-import static com.prealpha.util.PrintUtilities.*;
+import static com.prealpha.dcputil.util.PrintUtilities.*;
 
 /**
  * User: Ty

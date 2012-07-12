@@ -1,5 +1,8 @@
+package com.prealpha.dcputil;
+
 import org.junit.Test;
-import static com.prealpha.util.PrintUtilities.*;
+
+import static com.prealpha.dcputil.util.PrintUtilities.*;
 import static junit.framework.Assert.assertEquals;
 
 /**

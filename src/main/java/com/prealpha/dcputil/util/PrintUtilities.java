@@ -1,6 +1,6 @@
-package com.prealpha.util;
+package com.prealpha.dcputil.util;
 
-import com.prealpha.info.Operator;
+import com.prealpha.dcputil.info.Operator;
 
 /**
  * User: Ty
