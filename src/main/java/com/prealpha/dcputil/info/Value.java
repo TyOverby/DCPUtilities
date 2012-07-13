@@ -11,30 +11,21 @@ import com.prealpha.dcputil.data.Pack;
  */
 public class Value {
     public static class ValuePack extends Pack {
-        private final String identifier;
+        private final String[] identifiers;
         private final char code;
         private final int cycles;
         private final char value;
         
-        public ValuePack(String identifier, char code, int cycles, char value){
-            this.identifier = identifier;
+        public ValuePack(char code, int cycles, char value, String... identifiers){
+            this.identifiers = identifiers;
             this.code = code;
             this.cycles = cycles;
             this.value = value;
         }
-        public ValuePack(String identifier, char code, int cycles){
-            this(identifier, code, cycles, (char) 0);
-        }
-        public ValuePack(String identifier, char code, char value){
-            this(identifier,code,0,value);
-        }
-        public ValuePack(String identifier, char code){
-            this(identifier, code, 0, (char) 0);
-        }
         
         @Override
-        public String getIdentifier() {
-            return this.identifier;  //To change body of implemented methods use File | Settings | File Templates.
+        public String[] getIdentifiers() {
+            return this.identifiers;  //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
@@ -54,54 +45,65 @@ public class Value {
     public static final Keeper<ValuePack> values = new Keeper<ValuePack>();
 
     static{
-        add("A", 0x00);
-        add("B", 0x01);
-        add("C", 0x02);
-        add("X", 0x03);
-        add("Y", 0x04);
-        add("Z", 0x05);
-        add("I", 0x06);
-        add("J", 0x07);
+        add(0x00, "A");
+        add(0x01, "B");
+        add(0x02, "C");
+        add(0x03, "X");
+        add(0x04, "Y");
+        add(0x05, "Z");
+        add(0x06, "I");
+        add(0x07, "J");
 
-        add("[A]", 0x08);
-        add("[B]", 0x09);
-        add("[C]", 0x0a);
-        add("[X]", 0x0b);
-        add("[Y]", 0x0c);
-        add("[Z]", 0x0d);
-        add("[I]", 0x0e);
-        add("[J]", 0x0f);
+        add(0x08, "[A]");
+        add(0x09, "[B]");
+        add(0x0a, "[C]");
+        add(0x0b, "[X]");
+        add(0x0c, "[Y]");
+        add(0x0d, "[Z]");
+        add(0x0e, "[I]");
+        add(0x0f, "[J]");
 
-        add("[A+next]", 0x10, 1);
-        add("[B+next]", 0x11, 1);
-        add("[C+next]", 0x12, 1);
-        add("[X+next]", 0x13, 1);
-        add("[Y+next]", 0x14, 1);
-        add("[Z+next]", 0x15, 1);
-        add("[I+next]", 0x16, 1);
-        add("[J+next]", 0x17, 1);
+        add(0x10, 1, "[A+next]");
+        add(0x11, 1, "[B+next]");
+        add(0x12, 1, "[C+next]");
+        add(0x13, 1, "[X+next]");
+        add(0x14, 1, "[Y+next]");
+        add(0x15, 1, "[Z+next]");
+        add(0x16, 1, "[I+next]");
+        add(0x17, 1, "[J+next]");
         
-        add("PUSH/POP",     0x18);
-        add("[SP]",         0x19);
-        add("[SP+next]",    0x1a);
-        add("SP",           0x1b);
+        add(0x18, "PUSH/POP", "PUSH", "POP");
+        add(0x19, "PEEK");
+        add(0x19, "[SP]", "PEEK");
+        add(0x1a, "[SP+next]");
+        add(0x1b, "SP");
         
-        add("PC",       0x1c);
-        add("EX",       0x1d);
-        add("[next]",   0x1e, 1);
-        add("next",     0x1f, 1);
+        add(0x1c, "PC");
+        add(0x1d, "EX");
+        add(0x1e, 1, "[next]");
+        add(0x1f, 1, "next");
 
         // A can be a literal in-between 0 and 30
-        for(int i=0;i<=30;i++){
-            char code = (char)(i + 0x20);
-            add(""+i,code,i);
+        for(int i=-1;i<=30;i++){
+            char code = (char)(i + 0x21);
+            int k = i;
+            if(i==-1){
+                add(code, (char)i, ""+k);
+                k = 0xffff;
+            }
+            add(code, (char)i, ""+k);
         }
+
+        values.seal();
     }
 
-    private static void add(String identifier, int code, int clock){
-        values.add(new ValuePack(identifier, (char) code, clock));
+    private static void add(int code, int clock, String... identifiers){
+        values.add(new ValuePack((char) code, clock, (char) 0, identifiers));
     }
-    private static void add(String identifier, int code){
-        values.add(new ValuePack(identifier, (char) code));
+    private static void add(int code, String... identifiers){
+        values.add(new ValuePack((char) code, 0 , (char) 0 , identifiers));
+    }
+    private static void add(int code, char data, String... identifiers){
+        values.add(new ValuePack((char) code, 0, data, identifiers));
     }
 }

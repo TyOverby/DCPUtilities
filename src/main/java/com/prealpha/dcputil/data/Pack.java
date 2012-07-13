@@ -6,14 +6,14 @@ package com.prealpha.dcputil.data;
  * Time: 8:47 AM
  */
 public abstract class Pack {
-    public abstract String getIdentifier();
+    public abstract String[] getIdentifiers();
     public abstract char getCode();
     public abstract int getCycles();
 
     @Override
     public boolean equals(Object other){
         if(other instanceof Pack){
-            return(((Pack)other).getIdentifier().equals(this.getIdentifier()));
+            return(((Pack) other).getCode()==this.getCode());
         }
         return false;
     }

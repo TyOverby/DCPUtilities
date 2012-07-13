@@ -54,7 +54,7 @@ public class Playground {
         printOp(d);
     }
 
-    @Test
+    //@Test
     public void test3(){
         // SET PC, PC
         {
@@ -62,18 +62,22 @@ public class Playground {
             Pack b  = getVal("X");
             Pack a  = getVal("0");
 
-            char expected = 0xac63;
+            char expected = 0x8463;
             char result = Builder.makeInstruction(op, b, a);
-            
-            System.out.println("[expected]");
-            printHex(expected);
-            printOp(expected);
 
-            System.out.println("\n[actual]");
-            printHex(result);
-            printOp(result);
+            printHex(((Value.ValuePack)getVal("-1")).getValue());
+//            System.out.println("[expected]");
+//            printHex(expected);
+//            printOp(expected);
+//
+//            System.out.println("\n[actual]");
+//            printHex(result);
+//            printOp(result);
         }
     }
+
+
+
 
     private static Pack getOp(String id){
         return Operator.operators.get(id);

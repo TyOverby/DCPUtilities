@@ -37,7 +37,7 @@ public class OperatorTest{
             Pack b  = getVal("X");
             Pack a  = getVal("0");
 
-            char expected = 0xac63;
+            char expected = 0x8463;
             char result = Builder.makeInstruction(op, b, a);
             assertEquals(expected, result);
         }

@@ -82,6 +82,7 @@ public class Operator {
         addSpecial("HWN", 0x10, 2);
         addSpecial("HWQ", 0x11, 4);
         addSpecial("HWI", 0x12, 4);
+        operators.seal();
     }
 
     private static void add(String ident, int code, int cycles){

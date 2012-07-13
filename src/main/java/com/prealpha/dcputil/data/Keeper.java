@@ -10,19 +10,23 @@ import java.util.List;
  * Time: 8:46 AM
  */
 public class Keeper<K extends Pack> implements Iterable<K>{
+    private boolean sealed = false;
     private List<K> packList = new ArrayList<K>(50);
 
-    public Pack get(String identifier){
-        for(Pack p: packList){
-            if(p.getIdentifier().toLowerCase().equals(identifier.toLowerCase())){
-                return p;
+    public K get(String identifier){
+        for(K p: packList){
+            for(String s:p.getIdentifiers()){
+                if(s.toUpperCase().equals(identifier)){
+                    return p;
+                }
             }
+
         }
         return null;
     }
     
-    public Pack get(char code){
-        for(Pack p: packList){
+    public K get(char code){
+        for(K p: packList){
             if(p.getCode()==code){
                 return p;
             }
@@ -31,7 +35,12 @@ public class Keeper<K extends Pack> implements Iterable<K>{
     }
     
     public void add(K pack){
-        packList.add(pack);
+        if(!sealed){
+            packList.add(pack);
+        }
+    }
+    public void seal(){
+        this.sealed = true;
     }
 
     @Override

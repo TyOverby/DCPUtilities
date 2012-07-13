@@ -27,6 +27,6 @@ public class Builder {
     }
 
     public static char makeSpecialInstruction(Operator.OperatorPack opPack, Value.ValuePack aPack){
-        return makeInstruction(opPack,new Value.ValuePack(null,(char)0x0),aPack);
+        return makeInstruction(opPack,new Value.ValuePack((char)0x0, null),aPack);
     }
 }
