@@ -27,10 +27,7 @@ public class Lexer {
         String[] lines = input.split("\n");
         int ln = 1;
         for(String line:lines){
-            Expression exp = lexLine(line, ln);
-            if(exp.tokens.length>0){
-                tokenList.add(exp);
-            }
+            tokenList.addAll(lexLine(line, ln));
             ln++;
         }
 
@@ -38,25 +35,37 @@ public class Lexer {
     }
 
     private static final Pattern section = Pattern.compile("(\\[? *\\w+\\+?\\w* *\\]?)([;.*]?)");
-    public Expression lexLine(String line, int linNum){
+    public List<Expression> lexLine(String line, int linNum){
+        line = line.trim();
         line = line.replace(","," ");
         line = line.split(";")[0];
 
-        List<Token> tokens = new ArrayList<Token>(3);
+        String[] segments = line.split("\\|");
+        List<Expression> expressions = new ArrayList<Expression>();
+        for(String s:segments){
+            List<Token> tokens = new ArrayList<Token>(3);
 
-        Matcher matcher = section.matcher(line);
-        int start = 0;
-        while(matcher.find(start)){
-            String token = matcher.group(1).trim();
-            start = matcher.end(1);
-            tokens.add(new Token(token,linNum));
+            Matcher matcher = section.matcher(s);
+            int start = 0;
+            while(matcher.find(start)){
+                String token = matcher.group(1).trim();
+                start = matcher.end(1);
+                tokens.add(new Token(token,linNum));
+            }
+
+            if(tokens.size()>0){
+                expressions.add(new Expression(tokens.toArray(new Token[0])));
+            }
         }
-        return new Expression(tokens.toArray(new Token[0]));
+        return expressions;
     }
 
     public static void main(String... args){
         Lexer lexer = new Lexer();
-        System.out.println(lexer.lexLine("SET [A] 5; This is a test",0));
+        String input = "SET A B  |  SUB A 10";
+        for(Expression e:lexer.lex(input)){
+            System.out.println(e);
+        }
     }
 }
 
