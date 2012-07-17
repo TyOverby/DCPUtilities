@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.compiler;
+package com.prealpha.dcputil.assembler;
 
 import com.prealpha.dcputil.data.Pack;
 import com.prealpha.dcputil.info.Operator;
@@ -27,6 +27,16 @@ public class Builder {
     }
 
     public static char makeSpecialInstruction(Operator.OperatorPack opPack, Value.ValuePack aPack){
-        return makeInstruction(opPack,new Value.ValuePack((char)0x0, null),aPack);
+        char result = 0x0;
+        char op = opPack.getCode();
+        char a = aPack.getCode();
+
+        a <<=10;
+        op <<=5;
+
+        result += op;
+        result += a;
+
+        return result;
     }
 }

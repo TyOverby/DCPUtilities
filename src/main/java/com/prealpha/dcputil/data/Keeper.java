@@ -16,7 +16,7 @@ public class Keeper<K extends Pack> implements Iterable<K>{
     public K get(String identifier){
         for(K p: packList){
             for(String s:p.getIdentifiers()){
-                if(s.toUpperCase().equals(identifier)){
+                if(s.toUpperCase().equals(identifier.toUpperCase())){
                     return p;
                 }
             }

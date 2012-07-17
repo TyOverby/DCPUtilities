@@ -1,6 +1,6 @@
 package com.prealpha.dcputil;
 
-import com.prealpha.dcputil.compiler.Builder;
+import com.prealpha.dcputil.assembler.Builder;
 import com.prealpha.dcputil.data.Pack;
 import com.prealpha.dcputil.info.Operator;
 import com.prealpha.dcputil.info.Value;

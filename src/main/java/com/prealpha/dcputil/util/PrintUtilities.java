@@ -50,6 +50,24 @@ public class PrintUtilities {
     public static void printOp(char value){
         System.out.println(convertOp(value));
     }
+
+    public static String dump(char[] input){
+        StringBuilder sb = new StringBuilder();
+        char counter = 0;
+        for(int i=0;i<input.length;i++){
+            if(i%8==0){
+                sb.append("\n"+convertHex(counter)+":\t");
+            }
+            sb.append(" "+convertHex(input[i]));
+            counter++;
+        }
+
+        for(int i=0;i<8-counter%8;i++){
+            sb.append(" "+convertHex((char)0));
+        }
+
+        return sb.toString().substring(1);
+    }
     
     public static String stripLiteral(String input){
         return input.substring(2);

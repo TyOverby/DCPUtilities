@@ -14,15 +14,23 @@ public class Value {
         private final String[] identifiers;
         private final char code;
         private final int cycles;
-        private final char value;
+        private Character data;
+        private final boolean hasValue;
         
-        public ValuePack(char code, int cycles, char value, String... identifiers){
+        public ValuePack(char code, int cycles,  String... identifiers){
             this.identifiers = identifiers;
             this.code = code;
             this.cycles = cycles;
-            this.value = value;
+            this.hasValue = false;
         }
-        
+//        public ValuePack(char code, int cycles, String... identifiers){
+//            this.identifiers = identifiers;
+//            this.code = code;
+//            this.cycles = cycles;
+//            this.data = data;
+//            this.hasValue = true;
+//        }
+
         @Override
         public String[] getIdentifiers() {
             return this.identifiers;  //To change body of implemented methods use File | Settings | File Templates.
@@ -38,8 +46,21 @@ public class Value {
             return this.cycles;  //To change body of implemented methods use File | Settings | File Templates.
         }
 
-        public char getValue(){
-            return this.value;
+        @Override
+        public ValuePack clone() {
+            return new ValuePack(code,cycles,identifiers);
+        }
+        public void setData(Character Data){
+            this.data = data;
+        }
+        public Character getData(){
+            return this.data;
+        }
+
+        public ValuePack withData(Character data){
+            ValuePack toReturn = new ValuePack(this.code,this.cycles,this.identifiers).clone();
+            toReturn.data = data;
+            return toReturn;
         }
     }
     public static final Keeper<ValuePack> values = new Keeper<ValuePack>();
@@ -82,28 +103,26 @@ public class Value {
         add(0x1d, "EX");
         add(0x1e, 1, "[next]");
         add(0x1f, 1, "next");
+        add(0x00, 1, "data-literal");
 
         // A can be a literal in-between 0 and 30
         for(int i=-1;i<=30;i++){
             char code = (char)(i + 0x21);
             int k = i;
             if(i==-1){
-                add(code, (char)i, ""+k);
+                add(code, (char)i, ""+k,"literal");
                 k = 0xffff;
             }
-            add(code, (char)i, ""+k);
+            add(code, ""+k);
         }
 
         values.seal();
     }
 
     private static void add(int code, int clock, String... identifiers){
-        values.add(new ValuePack((char) code, clock, (char) 0, identifiers));
+        values.add(new ValuePack((char) code, clock, identifiers));
     }
     private static void add(int code, String... identifiers){
-        values.add(new ValuePack((char) code, 0 , (char) 0 , identifiers));
-    }
-    private static void add(int code, char data, String... identifiers){
-        values.add(new ValuePack((char) code, 0, data, identifiers));
+        values.add(new ValuePack((char) code, 0 , identifiers));
     }
 }

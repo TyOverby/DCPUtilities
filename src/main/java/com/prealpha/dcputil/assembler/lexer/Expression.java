@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.compiler;
+package com.prealpha.dcputil.assembler.lexer;
 
 /**
  * User: Ty
@@ -14,8 +14,13 @@ public class Expression {
 
     public String toString(){
         String total = "";
+        boolean first = true;
         for(Token t:tokens){
-            total+= t.toString()+" ";
+            if(!first){
+                total+="\t";
+            }
+            first = false;
+            total+= t.toString()+"\n";
         }
         return total;
     }

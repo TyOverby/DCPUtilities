@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.compiler;
+package com.prealpha.dcputil.assembler.parser;
 
 /**
  * User: Ty

@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.compiler;
+package com.prealpha.dcputil.assembler.lexer;
 
 /**
  * User: Ty
@@ -6,9 +6,6 @@ package com.prealpha.dcputil.compiler;
  * Time: 3:45 AM
  */
 public class Token {
-//    public enum TokenTypes{
-//        OPCODE, LABEL, LABEL_REF, REGISTER, REGISTER_REF,
-//    }
     public final String orig;
     public final int lineNum;
 
