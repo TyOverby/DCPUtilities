@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -31,6 +32,11 @@ public class Parser {
                 toReturn.add(pg);
             }
         }
+        this.fillLabels();
+        return toReturn;
+    }
+
+    private void fillLabels() throws ParserException {
         for(ValuePack vp:packToLable.keySet()){
             boolean isFixed = false;
             for(String s:labelToLine.keySet()){
@@ -45,124 +51,170 @@ public class Parser {
                         ".\nLabel does not exist or you are trying to access items like [PC] or IA",vp.lineNum);
             }
         }
-        return toReturn;
     }
+
+
 
     private PackGroup parseExpression(Expression expression) throws ParserException {
         int start = 0;
+        Token[] tokens = expression.tokens;
         Token first = expression.tokens[0];
         int line = first.lineNum;
 
-        // If it is a label
-        if(first.orig.contains(":")){
-            String stripped = first.orig.replace(":","");
-            if(!labelToLine.containsKey(stripped)){
-                labelToLine.put(first.orig.replace(":", ""), counter);
-            }
-            else{
-                throw new ParserException("Duplicate labels for: \""+stripped+"\" found at "+labelToLine.get(stripped)+" and "+first.lineNum,first.lineNum);
-            }
-            start = 1;
+        OperatorPack operator = null;
+        while(operator==null && start<tokens.length){
+            operator = getOperator(tokens[start]);
+            start++;
         }
-
-        if(expression.tokens.length>1){
-            OperatorPack op = Operator.operators.get(expression.tokens[start].orig).clone();
-            op.setLineNum(line);
-            if(op==null){
-                throw new ParserException("Count not find the Operator"+expression.tokens[0].orig,expression.tokens[0].lineNum);
-            }
-            counter++;
-            List<ValuePack> values = new ArrayList<ValuePack>();
-            for(int i=start+1;i<expression.tokens.length;i++){
-                if(!op.is("DAT")){
-                    ValuePack vp = getValue(expression.tokens[i], i);
-                    vp.setLineNum(line);
-                    values.add(vp);
-                }
-                else{
-                    values.add(Value.values.get("data-literal").withData(parseSingular(expression.tokens[i].orig,first.lineNum)));
-                }
-            }
-
-            return new PackGroup(op,values.toArray(new ValuePack[0]));
-        }
-        else{
+        if(operator == null){
             return null;
         }
-    }
-
-    private ValuePack getValue(Token token, int position) throws ParserException {
-        String original = token.orig;
-        int line = token.lineNum;
-
-        if(isNumber(original)){
-            original = ""+(int)parseSingular(original,line);
+        if(!operator.is("DAT")){
+            counter++;
         }
 
-        ValuePack value = Value.values.get(original);
-        // If it exists in the valuePack
-        if(value != null){
-            // If it is in the "B" position and it is a literal, disallow it
-            if(!(position==1&&value.is("literal"))){
-                return value.clone();
+        List<ValuePack> valuePacks = new ArrayList<ValuePack>();
+        for(int i=start, k=1; i<tokens.length;i++,k++){
+            if(operator.is("DAT")){
+                counter++;
+                valuePacks.add(new ValuePack((char)0xffff,0,"data-literal").withData(parseSingular(tokens[i].orig,line)));
             }
             else{
-                return Value.values.get("literal").withData((char)(value.getCode()-0x21));
+                valuePacks.add(getValue(tokens[i],k));
             }
         }
 
-        counter++;
-        boolean isPointer = false;
-        boolean hasPlus = false;
-        boolean containsNumber = false;
-        char number = 0;
+        return new PackGroup(operator,valuePacks);
+    }
 
-        // Check for pointer
-        if((original.contains("[")&&!original.contains("]"))||(!original.contains("[")&&original.contains("]"))){
-            throw new ParserException("Missing matching brackets",token.lineNum);
-        }
-        isPointer = original.contains("[");
-        // Check for plus
-        hasPlus = original.contains("+");
-        // Check if it is a number
-        containsNumber = isNumber(original.replace("[","").replace("]",""));
-        if(containsNumber){
-            number = parseSingular(original.replace("[","").replace("]",""),line);
+    private static final Pattern labelDefinition = Pattern.compile("^:(([a-z]|[A-Z]|_)\\w*)$");
+
+    /**
+     * Returns an OperatorPack containing the data about the Operator.
+     * If it could not be found (or is actually a label definition),
+     * returns null.
+     * @param token
+     * @return The Operator Pack or null.
+     * @throws ParserException If it is unable to be parsed
+     */
+    private OperatorPack getOperator(Token token) throws ParserException {
+        String orig = token.orig.trim();
+
+        Matcher labelDefinitionM = labelDefinition.matcher(orig);
+        if(labelDefinitionM.matches()){
+            register(labelDefinitionM.group(1),counter);
+            return null;
         }
 
-        if(hasPlus){
-            if(!isPointer){
-                throw new ParserException("Addition between elements not allowed unless dereferencing a pointer.",line);
+        OperatorPack op = Operator.operators.get(orig).clone();
+        if(op != null){
+            return op;
+        }
+
+        throw new ParserException("Unable to parse operator \""+orig+"\" is.",token.lineNum);
+
+    }
+
+
+
+
+    private static final Pattern register                = Pattern.compile("^(A|B|C|X|Y|Z|I|J|SP|PC|EX)$");
+    private static final Pattern pointerRegister         = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\]$");
+    private static final Pattern pointerRegisterPlusNext = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\+((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
+    private static final Pattern pointerNextPlusRegister = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\+(A|B|C|X|Y|Z|I|J|SP)\\]$");
+    private static final Pattern literal                 = Pattern.compile("^((0x\\w+)|(\\d+)|(0b(1|0)+))$");
+    private static final Pattern pointerNext             = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
+    private static final Pattern labelRef                = Pattern.compile("^(([a-z]|[A-Z]|_)\\w*)$");
+    private static final Pattern pointerLabelRef         = Pattern.compile("^\\[(([a-z]|[A-Z]|_)\\w*)\\]$");
+
+    private ValuePack getValue(Token token, int position) throws ParserException {
+        String original = token.orig.trim().replace(" ","").replace("\t","");
+        int line     = token.lineNum;
+
+        // Register
+        // A
+        Matcher registerM = register.matcher(original);
+        if(registerM.matches()){
+            return Value.values.get(registerM.group(1)).clone();
+        }
+
+        // Register Pointer
+        // [A]
+        Matcher pointerRegisterM = pointerRegister.matcher(original);
+        if(pointerRegisterM.matches()){
+            return Value.values.get("["+pointerRegisterM.group(1)+"]").clone();
+        }
+
+        // Register Pointer Plus Next
+        // [A+5]
+        Matcher pointerRegisterPlusM = pointerRegisterPlusNext.matcher(original);
+        if(pointerRegisterPlusM.matches()){
+            String reg = pointerRegisterPlusM.group(1);
+            char next  = parseSingular(pointerRegisterPlusM.group(2),line);
+            counter++;
+            return Value.values.get("["+reg+"+next]").withData(next);
+        }
+        // Register Next Plus Pointer
+        // [5+A]
+        Matcher pointerNextPlusRegisterM = pointerNextPlusRegister.matcher(original);
+        if(pointerNextPlusRegisterM.matches()){
+            char next  = parseSingular(pointerNextPlusRegisterM.group(1),line);
+            String reg = pointerNextPlusRegisterM.group(6);
+            counter++;
+            return Value.values.get("["+reg+"+next]").withData(next);
+        }
+
+        // Next
+        // 250
+        Matcher nextM = literal.matcher(original);
+        if(nextM.matches()){
+            char next = parseSingular(nextM.group(1),line);
+            if(next<=30 && position == 2){
+                return Value.values.get(""+(int)next).clone();
             }
-            String[] split = original.replace("[","").replace("]","").split("\\+");
-            ValuePack vp;
-            try{
-                vp = Value.values.get("["+split[0]+"+next]").withData(parseSingular(split[1],line));
+            else{
+                counter++;
+                return Value.values.get("next").withData(next);
             }
-            // If it is out of order
-            catch(Exception e){
-                vp =Value.values.get("["+split[1]+"+next]").withData(parseSingular(split[0],line));
-            }
+        }
+
+        // Pointer Next
+        // [250]
+        Matcher pointerNextM = pointerNext.matcher(original);
+        if(pointerNextM.matches()){
+            char next = parseSingular(pointerNextM.group(1),line);
+            counter++;
+            return Value.values.get("[next]").withData(next);
+        }
+
+        // Label Reference
+        // some_label
+        Matcher labelRefM = labelRef.matcher(original);
+        if(labelRefM.matches()){
+            counter++;
+            ValuePack vp = Value.values.get("next").clone();
+            register(vp,labelRefM.group(1));
             return vp;
         }
 
-        String build ="";
-        if(isPointer){
-            build = "[next]";
-        }
-        else
-        {
-            build = "next";
+        // Label Pointer Reference
+        // [some_label]
+        Matcher pointerLabelRefM = pointerLabelRef.matcher(original);
+        if(pointerLabelRefM.matches()){
+            counter++;
+            ValuePack vp = Value.values.get("[next]").clone();
+            register(vp,pointerLabelRefM.group(1));
+            return vp;
         }
 
-        if(containsNumber){
-            return Value.values.get(build).withData(number);
-        }
-        else{
-            ValuePack toReturn = Value.values.get(build).clone();
-            packToLable.put(toReturn,original.replace("[","").replace("]",""));
-            return toReturn;
-        }
+        throw new ParserException("Unable to parse token: \""+token.orig+"\" on line: "+line,line);
+    }
+
+    private void register(ValuePack vp, String label){
+        packToLable.put(vp,label);
+    }
+    private void register(String label, int line){
+        labelToLine.put(label,line);
     }
 
     private Character getInner(String input,int line) throws ParserException {
@@ -175,7 +227,7 @@ public class Parser {
             return null;
         }
     }
-    static final Pattern numberPattern = Pattern.compile("^((0x\\w+)|(\\d+)|(b(1|0)+))$");
+    static final Pattern numberPattern = Pattern.compile("^((0x\\w+)|(\\d+)|(0b(1|0)+))$");
     private boolean isNumber(String input){
         return numberPattern.matcher(input).matches();
     }
@@ -205,7 +257,7 @@ public class Parser {
             return (char) value;
         }
         else{
-            throw new ParserException("Number is either above ",lineNum);
+            throw new ParserException("Number is either above or below the limit.",lineNum);
         }
     }
 }

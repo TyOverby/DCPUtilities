@@ -25,7 +25,10 @@ public class Assembler {
 
         char[] buffer = new char[toReturn.size()];
         for(int i=0;i<buffer.length;i++){
-            buffer[i]=toReturn.get(i);
+            if(toReturn.get(i)==null){
+                System.out.println("test");
+            }
+            buffer[i] = toReturn.get(i);
         }
         return buffer;
     }
@@ -33,30 +36,33 @@ public class Assembler {
     public List<Character> assembleExpression(PackGroup pg){
         List<Character> toReturn = new ArrayList<Character>();
         if(!pg.operator.is("DAT")){
-            switch(pg.values.length){
+            switch(pg.values.size()){
                 case 2:
-                    toReturn.add(Builder.makeInstruction(pg.operator,pg.values[0],pg.values[1]));
-                    if(pg.values[1].getData()!=null){
-                        toReturn.add(pg.values[1].getData());
+                    toReturn.add(Builder.makeInstruction(pg.operator,pg.values.get(0),pg.values.get(1)));
+                    if(pg.values.get(1).getData()!=null){
+                        toReturn.add(pg.values.get(1).getData());
                     }
-                    if(pg.values[0].getData()!=null){
-                        toReturn.add(pg.values[0].getData());
+                    if(pg.values.get(0).getData()!=null){
+                        toReturn.add(pg.values.get(0).getData());
                     }
                     break;
                 case 1:
-                    toReturn.add(Builder.makeSpecialInstruction(pg.operator,pg.values[0]));
-                    if(pg.values[0].getData()!=null){
-                        toReturn.add(pg.values[0].getData());
+                    toReturn.add(Builder.makeSpecialInstruction(pg.operator,pg.values.get(0)));
+                    if(pg.values.get(0).getData()!=null){
+                        toReturn.add(pg.values.get(0).getData());
                     }
                     break;
                 default:
-                    System.err.println(pg.values.length);
+                    System.err.println("Can't handle operator with "+pg.values.size()+" arguments.");
             }
         }
         else{
             for(ValuePack vp:pg.values){
                 toReturn.add(vp.getData());
             }
+        }
+        if(toReturn.contains(null)){
+            System.out.println("Shit");
         }
 
         return toReturn;

@@ -3,6 +3,8 @@ package com.prealpha.dcputil.compiler.parser;
 import com.prealpha.dcputil.info.Operator;
 import com.prealpha.dcputil.info.Value;
 
+import java.util.List;
+
 /**
  * User: Ty
  * Date: 7/17/12
@@ -10,9 +12,9 @@ import com.prealpha.dcputil.info.Value;
  */
 public class PackGroup {
     public final Operator.OperatorPack operator;
-    public final Value.ValuePack[] values;
+    public final List<Value.ValuePack> values;
 
-    public PackGroup(Operator.OperatorPack operator, Value.ValuePack... values){
+    public PackGroup(Operator.OperatorPack operator, List<Value.ValuePack> values){
         this.operator = operator;
         this.values = values;
     }
