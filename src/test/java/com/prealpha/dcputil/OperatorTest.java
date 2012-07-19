@@ -1,7 +1,7 @@
 package com.prealpha.dcputil;
 
-import com.prealpha.dcputil.assembler.Builder;
-import com.prealpha.dcputil.data.Pack;
+import com.prealpha.dcputil.compiler.assembler.Builder;
+import com.prealpha.dcputil.info.data.Pack;
 import com.prealpha.dcputil.info.Operator;
 import com.prealpha.dcputil.info.Value;
 import org.junit.Test;

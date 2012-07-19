@@ -1,7 +1,7 @@
 package com.prealpha.dcputil.info;
 
-import com.prealpha.dcputil.data.Keeper;
-import com.prealpha.dcputil.data.Pack;
+import com.prealpha.dcputil.info.data.Keeper;
+import com.prealpha.dcputil.info.data.Pack;
 
 /**
  * User: Ty

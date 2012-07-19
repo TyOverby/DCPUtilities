@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.assembler;
+package com.prealpha.dcputil.compiler.assembler;
 
 import org.junit.Test;
 

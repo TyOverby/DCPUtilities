@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.assembler.lexer;
+package com.prealpha.dcputil.compiler.lexer;
 
 /**
  * User: Ty

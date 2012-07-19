@@ -1,8 +1,8 @@
 package com.prealpha.dcputil.info;
 
 
-import com.prealpha.dcputil.data.Keeper;
-import com.prealpha.dcputil.data.Pack;
+import com.prealpha.dcputil.info.data.Keeper;
+import com.prealpha.dcputil.info.data.Pack;
 
 /**
  * User: Ty
@@ -48,9 +48,13 @@ public class Value {
 
         @Override
         public ValuePack clone() {
-            return new ValuePack(code,cycles,identifiers);
+            ValuePack toReturn = new ValuePack(code,cycles,identifiers);
+            if(this.data!=null){
+                toReturn.setData(this.data);
+            }
+            return toReturn;
         }
-        public void setData(Character Data){
+        public void setData(Character data){
             this.data = data;
         }
         public Character getData(){

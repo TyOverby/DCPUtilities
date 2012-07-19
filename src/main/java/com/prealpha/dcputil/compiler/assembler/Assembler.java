@@ -1,9 +1,9 @@
-package com.prealpha.dcputil.assembler;
+package com.prealpha.dcputil.compiler.assembler;
 
-import com.prealpha.dcputil.assembler.parser.PackGroup;
-import com.prealpha.dcputil.assembler.parser.ParserException;
+import com.prealpha.dcputil.compiler.parser.PackGroup;
+import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.info.Value.ValuePack;
-import com.prealpha.dcputil.assembler.lexer.Expression;
+import com.prealpha.dcputil.compiler.lexer.Expression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ import java.util.List;
 public class Assembler {
     private List<Expression> expressionList;
     private List<Character> charList = new ArrayList<Character>();
-    private final List<AssemblerWarning> warnings = new ArrayList<AssemblerWarning>();
 
     public char[] assemble(List<PackGroup> packGroups) throws ParserException {
         List<Character> toReturn = new ArrayList<Character>();
@@ -47,10 +46,11 @@ public class Assembler {
                 case 1:
                     toReturn.add(Builder.makeSpecialInstruction(pg.operator,pg.values[0]));
                     if(pg.values[0].getData()!=null){
-                        toReturn.add(pg.values[1].getData());
+                        toReturn.add(pg.values[0].getData());
                     }
+                    break;
                 default:
-                    System.err.println("Assembler.java 55");
+                    System.err.println(pg.values.length);
             }
         }
         else{
@@ -58,6 +58,7 @@ public class Assembler {
                 toReturn.add(vp.getData());
             }
         }
+
         return toReturn;
     }
 }

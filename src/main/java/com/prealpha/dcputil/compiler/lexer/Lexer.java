@@ -1,7 +1,4 @@
-package com.prealpha.dcputil.assembler;
-
-import com.prealpha.dcputil.assembler.lexer.Expression;
-import com.prealpha.dcputil.assembler.lexer.Token;
+package com.prealpha.dcputil.compiler.lexer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +31,7 @@ public class Lexer {
         return tokenList;
     }
 
-    private static final Pattern section = Pattern.compile("(\\[? *\\w+\\+?\\w* *\\]?)([;.*]?)");
+    private static final Pattern section = Pattern.compile("(:?\\[? *\\w+\\+?\\w* *\\]?)([;.*]?)");
     public List<Expression> lexLine(String line, int linNum){
         line = line.trim();
         line = line.replace(","," ");

@@ -1,7 +1,9 @@
-package com.prealpha.dcputil.assembler;
+package com.prealpha.dcputil.compiler.assembler;
 
-import com.prealpha.dcputil.assembler.parser.Parser;
-import com.prealpha.dcputil.assembler.parser.ParserException;
+import com.prealpha.dcputil.compiler.assembler.Assembler;
+import com.prealpha.dcputil.compiler.lexer.Lexer;
+import com.prealpha.dcputil.compiler.parser.Parser;
+import com.prealpha.dcputil.compiler.parser.ParserException;
 
 import static com.prealpha.dcputil.util.PrintUtilities.dump;
 import static junit.framework.Assert.assertEquals;
@@ -17,18 +19,23 @@ public class CompilerTest {
     protected void assertEqual(char[] expected, char[] actual){
         if(expected.length!=actual.length){
             System.err.println("Expected length: "+expected.length+"  Actual length: "+actual.length);
+            printError(expected,actual);
             assert(false);
         }
         for(int i=0;i<expected.length;i++){
             if(expected[i]!=actual[i]){
-                String toPrint = "Expected:";
-                toPrint += "\n\t"+dump(expected).replace("\n","\n\t");
-                toPrint += "\nActual:";
-                toPrint += "\n\t"+dump(actual).replace("\n","\n\t");
-                System.err.println(toPrint);
+                printError(expected,actual);
                 assert(false);
             }
         }
+    }
+
+    private void printError(char[] expected, char[] actual){
+        String toPrint = "Expected:";
+        toPrint += "\n\t"+dump(expected).replace("\n","\n\t");
+        toPrint += "\nActual:";
+        toPrint += "\n\t"+dump(actual).replace("\n","\n\t");
+        System.err.println(toPrint);
     }
 
     protected char[] compile(String input){

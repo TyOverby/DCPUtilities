@@ -1,11 +1,11 @@
-package com.prealpha.dcputil.assembler.parser;
+package com.prealpha.dcputil.compiler.parser;
 
 import com.prealpha.dcputil.info.Operator;
 import com.prealpha.dcputil.info.Operator.OperatorPack;
 import com.prealpha.dcputil.info.Value;
 import com.prealpha.dcputil.info.Value.ValuePack;
-import com.prealpha.dcputil.assembler.lexer.Expression;
-import com.prealpha.dcputil.assembler.lexer.Token;
+import com.prealpha.dcputil.compiler.lexer.Expression;
+import com.prealpha.dcputil.compiler.lexer.Token;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +32,17 @@ public class Parser {
             }
         }
         for(ValuePack vp:packToLable.keySet()){
+            boolean isFixed = false;
             for(String s:labelToLine.keySet()){
                 if(s.equals(packToLable.get(vp))){
                     vp.setData((char)(int)labelToLine.get(s));
+                    isFixed = true;
+                    break;
                 }
+            }
+            if(!isFixed){
+                throw new ParserException("Can not find label for: \""+packToLable.get(vp)+"\".  on line "+vp.lineNum+
+                        ".\nLabel does not exist or you are trying to access items like [PC] or IA",vp.lineNum);
             }
         }
         return toReturn;
@@ -44,11 +51,13 @@ public class Parser {
     private PackGroup parseExpression(Expression expression) throws ParserException {
         int start = 0;
         Token first = expression.tokens[0];
+        int line = first.lineNum;
+
         // If it is a label
         if(first.orig.contains(":")){
             String stripped = first.orig.replace(":","");
             if(!labelToLine.containsKey(stripped)){
-                labelToLine.put(first.orig.replace(":", ""), ++counter);
+                labelToLine.put(first.orig.replace(":", ""), counter);
             }
             else{
                 throw new ParserException("Duplicate labels for: \""+stripped+"\" found at "+labelToLine.get(stripped)+" and "+first.lineNum,first.lineNum);
@@ -58,6 +67,7 @@ public class Parser {
 
         if(expression.tokens.length>1){
             OperatorPack op = Operator.operators.get(expression.tokens[start].orig).clone();
+            op.setLineNum(line);
             if(op==null){
                 throw new ParserException("Count not find the Operator"+expression.tokens[0].orig,expression.tokens[0].lineNum);
             }
@@ -65,7 +75,9 @@ public class Parser {
             List<ValuePack> values = new ArrayList<ValuePack>();
             for(int i=start+1;i<expression.tokens.length;i++){
                 if(!op.is("DAT")){
-                    values.add((getValue(expression.tokens[i], i)));
+                    ValuePack vp = getValue(expression.tokens[i], i);
+                    vp.setLineNum(line);
+                    values.add(vp);
                 }
                 else{
                     values.add(Value.values.get("data-literal").withData(parseSingular(expression.tokens[i].orig,first.lineNum)));
@@ -83,15 +95,19 @@ public class Parser {
         String original = token.orig;
         int line = token.lineNum;
 
+        if(isNumber(original)){
+            original = ""+(int)parseSingular(original,line);
+        }
+
         ValuePack value = Value.values.get(original);
         // If it exists in the valuePack
         if(value != null){
             // If it is in the "B" position and it is a literal, disallow it
             if(!(position==1&&value.is("literal"))){
-                return value;
+                return value.clone();
             }
             else{
-                return Value.values.get("next").withData((char)(value.getCode()-0x21));
+                return Value.values.get("literal").withData((char)(value.getCode()-0x21));
             }
         }
 
@@ -115,8 +131,19 @@ public class Parser {
         }
 
         if(hasPlus){
+            if(!isPointer){
+                throw new ParserException("Addition between elements not allowed unless dereferencing a pointer.",line);
+            }
             String[] split = original.replace("[","").replace("]","").split("\\+");
-            return Value.values.get("["+split[0]+"+next]").withData(parseSingular(split[1],line));
+            ValuePack vp;
+            try{
+                vp = Value.values.get("["+split[0]+"+next]").withData(parseSingular(split[1],line));
+            }
+            // If it is out of order
+            catch(Exception e){
+                vp =Value.values.get("["+split[1]+"+next]").withData(parseSingular(split[0],line));
+            }
+            return vp;
         }
 
         String build ="";
@@ -171,7 +198,7 @@ public class Parser {
         try{
             value = Integer.parseInt(input,radix);
         }catch (NumberFormatException nfe){
-            throw new ParserException("Number can not be parsed",lineNum);
+            throw new ParserException("Number can not be parsed: \""+input+"\" on line: "+lineNum,lineNum);
         }
 
         if(value<=Character.MAX_VALUE && value>=Character.MIN_VALUE){

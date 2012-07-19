@@ -62,6 +62,8 @@ public class PrintUtilities {
             counter++;
         }
 
+        sb.append(" |");
+
         for(int i=0;i<8-counter%8;i++){
             sb.append(" "+convertHex((char)0));
         }

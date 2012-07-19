@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.data;
+package com.prealpha.dcputil.info.data;
 
 import com.prealpha.dcputil.util.PrintUtilities;
 
@@ -12,6 +12,8 @@ public abstract class Pack {
     public abstract char getCode();
     public abstract int getCycles();
     public abstract Pack clone();
+
+    public int lineNum = -1;
 
     @Override
     public boolean equals(Object other){
@@ -28,6 +30,11 @@ public abstract class Pack {
             }
         }
         return false;
+    }
+
+    public Pack setLineNum(int line){
+        this.lineNum = line;
+        return this;
     }
 
     @Override

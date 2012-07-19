@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.assembler.parser;
+package com.prealpha.dcputil.compiler.parser;
 
 import com.prealpha.dcputil.info.Operator;
 import com.prealpha.dcputil.info.Value;
