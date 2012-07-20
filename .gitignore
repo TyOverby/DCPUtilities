@@ -1,4 +1,8 @@
+.classpath
+.project
+.settings/
 target/
 .idea/
 out/
 *.class
+*.swp

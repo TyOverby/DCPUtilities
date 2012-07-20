@@ -3,14 +3,21 @@ package com.prealpha.dcputil.emulator;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.prealpha.dcputil.emulator.EmulatorHelper.clear;
+import static com.prealpha.dcputil.emulator.EmulatorHelper.isConditional;
+import static com.prealpha.dcputil.emulator.EmulatorHelper.over;
 import static com.prealpha.dcputil.emulator.Opcodes.*;
 import static com.prealpha.dcputil.emulator.Valuecodes.*;
+import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
+
 /**
  * User: Ty
  * Date: 7/19/12
  * Time: 11:46 AM
  */
 class BaseMachine {
+    protected boolean isRunning = false;
+
     private static final char A_SIZE  = 6;
     private static final char B_SIZE  = 5;
     private static final char OP_SIZE = 5;
@@ -20,13 +27,20 @@ class BaseMachine {
     public char[] getRegisters() {
         return registers;
     }
-
     public char[] getMemory() {
         return memory;
     }
-
-    public boolean[] getModified() {
-        return modified;
+    public boolean isModified(int i) {
+        return modified[i];
+    }
+    public char getSp(){
+        return sp;
+    }
+    public char getPc(){
+        return  pc;
+    }
+    public char getEx(){
+        return ex;
     }
 
     protected char[] registers = new char[0x07+1];
@@ -48,8 +62,9 @@ class BaseMachine {
         char opcode   = clear(instruction, A_SIZE+B_SIZE, 0);
         char opA      = clear(instruction, 0, B_SIZE+OP_SIZE);
         char opB      = clear(instruction, A_SIZE, B_SIZE);
-        char valA = get(opA);
-        char valB = get(opB);
+
+        char valA = get(opA, true);
+        char valB = get(opB, false);
         short sValA = (short) valA;
         short sValB = (short) valB;
 
@@ -218,14 +233,31 @@ class BaseMachine {
                 set(opB, valA);
                 registers[registers.length-1] = (char) (registers[registers.length-1]-1);
                 registers[registers.length-2] = (char) (registers[registers.length-2]-1);
-
+                break;
+            case SPECIAL:
+                switch (opB){
+                    case JSR:
+                        set(PUSH_POP,pc);
+                        pc = valA;
+                        break;
+                    case BRK:
+                        this.isRunning = false;
+                        break;
+                    case INT:
+                    case IAG:
+                    case IAS:
+                    case FRI:
+                    case IAQ:
+                    case HWN:
+                    case HWQ:
+                    case HWI:
+                        throw new EmulatorException("Operation not accepted"+convertHex(opB),pc);
+                }
 
         }
     }
 
-    private boolean over(int input){
-        return input>CHAR_MAX || input<0;
-    }
+
     private void set(char input, int data) throws EmulatorException {
         set(input, (char) data);
     }
@@ -243,7 +275,10 @@ class BaseMachine {
             return;
         }
         if(input == PUSH_POP){
-            memory[sp++] = data;
+            // SP already got evaluated once as POP, so we
+            // have to decrement it one extra time
+            //sp--;
+            memory[--sp] = data;
             return;
         }
         if(input == PEEK){
@@ -251,7 +286,8 @@ class BaseMachine {
             return;
         }
         if(input==PICK){
-            memory[sp+memory[pc++]] = data;
+            char place = (char) (sp+memory[pc++]);
+            memory[place] = data;
             return;
         }
         if(input == SP){
@@ -276,7 +312,7 @@ class BaseMachine {
         throw new EmulatorException("Can't process value: "+input,pc);
     }
 
-    private char get(char input) throws EmulatorException {
+    private char get(char input, boolean modifyStack) throws EmulatorException {
         if(input <= REGISTER_MAX){
             return registers[input];
         }
@@ -287,13 +323,19 @@ class BaseMachine {
             return memory[registers[input-POINT_A_NEXT]+memory[pc++]];
         }
         if(input == PUSH_POP){
-            return memory[--sp];
+            if(modifyStack){
+                return memory[sp++];
+            }
+            else{
+                return 0;
+            }
         }
         if(input == PEEK){
             return memory[sp];
         }
         if(input==PICK){
-            return memory[sp+memory[pc++]];
+            char place = (char)(sp+memory[pc++]);
+            return memory[place];
         }
         if(input == SP){
             return sp;
@@ -325,14 +367,14 @@ class BaseMachine {
         boolean cond = isConditional(opcode);
 
         if(cond){
-            char valA = get(opA);
-            char valB = get(opB);
+            char valA = get(opA, false);
+            char valB = get(opB, false);
             skipUntilNonConditional(runs+1);
         }
         else{
             if(runs==0){
-                char valA = get(opA);
-                char valB = get(opB);
+                char valA = get(opA, false);
+                char valB = get(opB, false);
             }
             else{
                 pc--;
@@ -341,20 +383,6 @@ class BaseMachine {
 
     }
 
-    private static boolean isConditional(char opcode){
-        if(opcode>=0x10 && opcode<=0x17){
-            return true;
-        }
-        return false;
-    }
-
-    private static char clear(char input, int left, int right){
-        input <<= left;
-        input >>= left;
-
-        input >>= right;
-        return input;
-    }
 
 
 

@@ -12,7 +12,7 @@ import com.prealpha.dcputil.emulator.Machine;
  */
 public class BasicSystem {
     private final BasicAssembler assembler = new BasicAssembler();
-    private final Machine machine = new Machine();
+    public final Machine machine = new Machine();
 
     public void load(String program) throws ParserException {
         char[] pro = assembler.assemble(program);
@@ -21,6 +21,9 @@ public class BasicSystem {
 
     public void step() throws EmulatorException {
         machine.step();
+    }
+    public void run() throws EmulatorException {
+        machine.run();
     }
     public void runUntilPosition(int position) throws EmulatorException {
         machine.runUntilPosition(position);

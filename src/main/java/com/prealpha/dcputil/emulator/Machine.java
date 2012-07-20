@@ -6,7 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Machine extends BaseMachine{
-    private boolean isRunning = false;
+
 
     public void run() throws EmulatorException {
         isRunning = true;

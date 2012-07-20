@@ -87,6 +87,7 @@ public class Operator {
         
         // Specials
         addSpecial("JSR", 0x01, 3);
+        addSpecial("BRK", 0x02, 0);
 
         addSpecial("INT", 0x08, 4);
         addSpecial("IAG", 0x09, 1);

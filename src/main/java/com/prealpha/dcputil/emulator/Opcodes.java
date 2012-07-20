@@ -40,4 +40,19 @@ public class Opcodes {
 
 
     public static final char SPECIAL = 0x0;
+        public static final char JSR = 0x01;
+        public static final char BRK = 0x02;
+
+        public static final char INT = 0x08;
+        public static final char IAG = 0x09;
+        public static final char IAS = 0x0a;
+        public static final char FRI = 0x0b;
+        public static final char IAQ = 0x0c;
+
+        public static final char HWN = 0x10;
+        public static final char HWQ = 0x11;
+        public static final char HWI = 0x12;
+
+
+
 }

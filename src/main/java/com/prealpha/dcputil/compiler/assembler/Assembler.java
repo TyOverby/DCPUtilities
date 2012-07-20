@@ -2,6 +2,7 @@ package com.prealpha.dcputil.compiler.assembler;
 
 import com.prealpha.dcputil.compiler.parser.PackGroup;
 import com.prealpha.dcputil.compiler.parser.ParserException;
+import com.prealpha.dcputil.info.Operator;
 import com.prealpha.dcputil.info.Value.ValuePack;
 import com.prealpha.dcputil.compiler.lexer.Expression;
 
@@ -53,7 +54,8 @@ public class Assembler {
                     }
                     break;
                 default:
-                    System.err.println("Can't handle operator with "+pg.values.size()+" arguments.");
+                    toReturn.add(Builder.makeSpecialInstruction(pg.operator, new ValuePack((char) 0x0, 0, "")));
+                    //System.err.println("Can't handle operator with "+pg.values.size()+" arguments.");
             }
         }
         else{

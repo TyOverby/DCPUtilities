@@ -2,6 +2,8 @@ package com.prealpha.dcputil.util;
 
 import com.prealpha.dcputil.info.Operator;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 /**
  * User: Ty
  * Date: 7/9/12
@@ -51,6 +53,10 @@ public class PrintUtilities {
         System.out.println(convertOp(value));
     }
 
+    public static void printDump(char[] input){
+        System.out.println(dump(input));
+    }
+
     public static String dump(char[] input){
         StringBuilder sb = new StringBuilder();
         char counter = 0;
@@ -62,10 +68,10 @@ public class PrintUtilities {
             counter++;
         }
 
-        sb.append(" |");
 
         for(int i=0;i<8-counter%8;i++){
-            sb.append(" "+convertHex((char)0));
+            if(counter!=0)
+                sb.append(" "+convertHex((char)0));
         }
 
         return sb.toString().substring(1);

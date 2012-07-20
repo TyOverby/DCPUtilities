@@ -112,12 +112,12 @@ public class Parser {
             return null;
         }
 
-        OperatorPack op = Operator.operators.get(orig).clone();
+        OperatorPack op = Operator.operators.get(orig);
         if(op != null){
-            return op;
+            return op.clone();
         }
 
-        throw new ParserException("Unable to parse operator \""+orig+"\" is.",token.lineNum);
+        throw new ParserException("Unable to parse operator \""+orig+"\".",token.lineNum);
 
     }
 
