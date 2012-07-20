@@ -25,6 +25,7 @@ public class Parser {
     private Map<ValuePack,String> packToLable = new HashMap<ValuePack, String>();
 
     public List<PackGroup> parse(List<Expression> expressions) throws ParserException {
+        this.counter=0;
         List<PackGroup> toReturn = new ArrayList<PackGroup>(expressions.size());
         for(Expression expression:expressions){
             PackGroup pg = parseExpression(expression);
@@ -69,6 +70,7 @@ public class Parser {
         if(operator == null){
             return null;
         }
+        operator.setLineNum(line);
         if(!operator.is("DAT")){
             counter++;
         }
@@ -77,10 +79,14 @@ public class Parser {
         for(int i=start, k=1; i<tokens.length;i++,k++){
             if(operator.is("DAT")){
                 counter++;
-                valuePacks.add(new ValuePack((char)0xffff,0,"data-literal").withData(parseSingular(tokens[i].orig,line)));
+                ValuePack vp = new ValuePack((char)0xffff,0,"data-literal").withData(parseSingular(tokens[i].orig,line));
+                vp.setLineNum(line);
+                valuePacks.add(vp);
             }
             else{
-                valuePacks.add(getValue(tokens[i],k));
+                ValuePack vp = getValue(tokens[i],k);
+                vp.setLineNum(line);
+                valuePacks.add(vp);
             }
         }
 
@@ -121,6 +127,7 @@ public class Parser {
     private static final Pattern register                = Pattern.compile("^(A|B|C|X|Y|Z|I|J|SP|PC|EX)$");
     private static final Pattern pointerRegister         = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\]$");
     private static final Pattern pointerRegisterPlusNext = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\+((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
+    private static final Pattern stackOperations         = Pattern.compile("^((PUSH)|(POP)|(PEEK))$");
     private static final Pattern pointerNextPlusRegister = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\+(A|B|C|X|Y|Z|I|J|SP)\\]$");
     private static final Pattern literal                 = Pattern.compile("^((0x\\w+)|(\\d+)|(0b(1|0)+))$");
     private static final Pattern pointerNext             = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
@@ -129,7 +136,7 @@ public class Parser {
 
     private ValuePack getValue(Token token, int position) throws ParserException {
         String original = token.orig.trim().replace(" ","").replace("\t","");
-        int line     = token.lineNum;
+        int line  = token.lineNum;
 
         // Register
         // A
@@ -143,6 +150,12 @@ public class Parser {
         Matcher pointerRegisterM = pointerRegister.matcher(original);
         if(pointerRegisterM.matches()){
             return Value.values.get("["+pointerRegisterM.group(1)+"]").clone();
+        }
+
+        // Stack Operations
+        Matcher stackOperationsM = stackOperations.matcher(original);
+        if(stackOperationsM.matches()){
+            return Value.values.get(stackOperationsM.group(1)).clone();
         }
 
         // Register Pointer Plus Next

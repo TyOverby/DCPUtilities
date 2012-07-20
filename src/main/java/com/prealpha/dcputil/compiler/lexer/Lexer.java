@@ -56,13 +56,5 @@ public class Lexer {
         }
         return expressions;
     }
-
-    public static void main(String... args){
-        Lexer lexer = new Lexer();
-        String input = "SET A B  |  SUB A 10";
-        for(Expression e:lexer.lex(input)){
-            System.out.println(e);
-        }
-    }
 }
 

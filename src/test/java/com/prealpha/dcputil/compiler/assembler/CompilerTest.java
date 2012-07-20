@@ -38,10 +38,12 @@ public class CompilerTest {
         System.err.println(toPrint);
     }
 
+
+    private static final Lexer lexer = new Lexer();
+    private static final Parser parser = new Parser();
+    private static final Assembler assembler = new Assembler();
     protected char[] compile(String input){
-        Lexer lexer = new Lexer();
-        Parser parser = new Parser();
-        Assembler assembler = new Assembler();
+
         try {
             return assembler.assemble(parser.parse(lexer.lex(input)));
         } catch (ParserException e) {

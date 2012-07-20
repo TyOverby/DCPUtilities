@@ -11,12 +11,12 @@ import com.prealpha.dcputil.compiler.preprocessor.PreProcessor;
  * Date: 7/18/12
  * Time: 2:49 PM
  */
-public class StandardAssembler {
+public class BasicAssembler {
     public PreProcessor preProcessor;
     public Lexer lexer;
     public Parser parser;
     public Assembler assembler;
-    public StandardAssembler(){
+    public BasicAssembler(){
         this.preProcessor = new PreProcessor();
         this.lexer = new Lexer();
         this.parser = new Parser();

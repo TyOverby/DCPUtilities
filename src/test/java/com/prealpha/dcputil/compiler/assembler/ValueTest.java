@@ -3,6 +3,7 @@ package com.prealpha.dcputil.compiler.assembler;
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import org.junit.Test;
 
+import static com.prealpha.dcputil.util.PrintUtilities.dump;
 import static com.prealpha.dcputil.util.PrintUtilities.printOp;
 
 /**
@@ -253,10 +254,61 @@ public class ValueTest extends CompilerTest{
         }
     }
 
-//    @Test(expected=ParserException.class)
-//    public void testFail() throws ParserException{
-//        String input = "ADD A [IA]";
-//        compile(input);
-//    }
+    @Test
+    public void testALiteralPointer(){
+        {
+            String input = "SET A [0]";
+            char[] expected = {0x7801,0x0000};
+            assertEqual(expected,compile(input));
+        }
+        {
+            String input = "SET A [560]";
+            char[] expected = {0x7801,0x0230};
+            assertEqual(expected,compile(input));
+        }
+
+    }
+    @Test
+    public void testBLiteralPointer(){
+        {
+            String input = "SET [0] 550";
+            char[] expected = {0x7fc1,0x0226,0x0000};
+            assertEqual(expected,compile(input));
+        }
+        {
+            String input = "SET [550] 550";
+            char[] expected = {0x7fc1,0x0226,0x0226};
+            assertEqual(expected,compile(input));
+        }
+
+    }
+
+    @Test
+    public void testABLiteralPointer(){
+        {
+            String input = "SET [0] [550]";
+            char[] expected = {0x7bc1,0x0226,0x0000};
+            assertEqual(expected,compile(input));
+        }
+        {
+            String input = "SET [550] [550]";
+            char[] expected = {0x7bc1,0x0226,0x0226};
+            assertEqual(expected,compile(input));
+        }
+    }
+
+    @Test
+    public void testStackOperations(){
+        {
+            String input = "SET [550] POP";
+            char[] expected = {0x63c1,0x0226};
+            assertEqual(expected,compile(input));
+        }
+        {
+            String input = "SET X POP";
+            char[] expected = {0x6061};
+            assertEqual(expected,compile(input));
+        }
+    }
 
 }
