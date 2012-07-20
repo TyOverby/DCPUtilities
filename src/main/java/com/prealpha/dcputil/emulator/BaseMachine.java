@@ -22,27 +22,6 @@ class BaseMachine {
     private static final char B_SIZE  = 5;
     private static final char OP_SIZE = 5;
 
-
-
-    public char[] getRegisters() {
-        return registers;
-    }
-    public char[] getMemory() {
-        return memory;
-    }
-    public boolean isModified(int i) {
-        return modified[i];
-    }
-    public char getSp(){
-        return sp;
-    }
-    public char getPc(){
-        return  pc;
-    }
-    public char getEx(){
-        return ex;
-    }
-
     protected char[] registers = new char[0x07+1];
     protected char   sp = 0x0;
     protected char   pc = 0x0;
@@ -382,13 +361,5 @@ class BaseMachine {
         }
 
     }
-
-
-
-
-    // EVENT SYSTEM
-
-
-
 
 }

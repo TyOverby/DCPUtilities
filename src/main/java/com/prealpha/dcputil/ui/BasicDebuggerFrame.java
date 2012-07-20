@@ -157,7 +157,7 @@ public class BasicDebuggerFrame {
 				try {
 					BasicDebuggerFrame.this.system.machine.addStepEvent(new StepEvent(){
 
-						public void onStep() {
+						public void onStep(Machine machine) {
 							BasicDebuggerFrame.this.onTick(BasicDebuggerFrame.this.system);							
 						}});
 					BasicDebuggerFrame.this.system.runUntilTime(2000);

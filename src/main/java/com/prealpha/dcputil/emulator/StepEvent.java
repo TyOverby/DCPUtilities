@@ -6,5 +6,5 @@ package com.prealpha.dcputil.emulator;
  * Time: 5:06 PM
  */
 public interface  StepEvent {
-    public abstract void onStep();
+    public abstract void onStep(Machine machine);
 }

@@ -20,13 +20,13 @@ import static com.prealpha.dcputil.util.PrintUtilities.*;
 public class Playground extends CompilerTest{
 
     public static  void main(String... args) throws EmulatorException, ParserException {
-        final BasicSystem bs = new BasicSystem();
+        BasicSystem bs = new BasicSystem();
         bs.load(":loop | ADD A 1 | SET PC loop");
         bs.machine.addStepEvent(new StepEvent() {
             private int count = 0;
             @Override
-            public void onStep() {
-                System.out.println((int)bs.machine.getPc()+": "+count++ +"->"+(int)bs.machine.getRegisters()[0]);
+            public void onStep(Machine m) {
+                System.out.println((int)m.getPc()+": "+count++ +"->"+(int)m.getRegisters()[0]);
             }
         });
 

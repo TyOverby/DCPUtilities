@@ -62,7 +62,26 @@ public class Machine extends BaseMachine{
     }
     private void fireEvents(){
         for(StepEvent se:stepEvents){
-            se.onStep();
+            se.onStep(this);
         }
+    }
+
+    public char[] getRegisters() {
+        return registers;
+    }
+    public char[] getMemory() {
+        return memory;
+    }
+    public boolean isModified(int i) {
+        return modified[i];
+    }
+    public char getSp(){
+        return sp;
+    }
+    public char getPc(){
+        return  pc;
+    }
+    public char getEx(){
+        return ex;
     }
 }
