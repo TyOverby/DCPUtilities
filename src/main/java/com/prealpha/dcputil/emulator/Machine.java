@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Machine extends BaseMachine{
+public class Machine extends NewBaseMachine{
 
 
     public void run() throws EmulatorException {

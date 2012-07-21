@@ -76,6 +76,32 @@ public class PrintUtilities {
 
         return sb.toString().substring(1);
     }
+    public static String dump(char[] input,int... highlight){
+        StringBuilder sb = new StringBuilder();
+        char counter = 0;
+        for(int i=0;i<input.length;i++){
+            String space = " ";
+            for(int h:highlight){
+                if(i==h){
+                    space = "#";
+                }
+            }
+
+            if(i%8==0){
+                sb.append("\n"+convertHex(counter)+":\t");
+            }
+            sb.append(space+convertHex(input[i])+space);
+            counter++;
+        }
+
+
+        for(int i=0;i<8-counter%8;i++){
+            if(counter!=0)
+                sb.append(" "+convertHex((char)0));
+        }
+
+        return sb.toString().substring(1);
+    }
     
     public static String stripLiteral(String input){
         return input.substring(2);

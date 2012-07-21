@@ -57,6 +57,15 @@ public class BasicDebuggerFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception e){
+            // Don't do anything, we don't really care about the look and feel.
+        }
+
         registryList = new DefaultListModel<String>();
 		JList regList = new JList(registryList);
 		regList.setBounds(830, 34, 88, 231);
@@ -64,18 +73,18 @@ public class BasicDebuggerFrame {
 
         DefaultListModel<String> rnlm = new DefaultListModel<String>();
         JList regNameList = new JList(rnlm);
-        rnlm.addElement("A");
-        rnlm.addElement("B");
-        rnlm.addElement("C");
-        rnlm.addElement("X");
-        rnlm.addElement("Y");
-        rnlm.addElement("Z");
-        rnlm.addElement("I");
-        rnlm.addElement("J");
+        rnlm.addElement(" A");
+        rnlm.addElement(" B");
+        rnlm.addElement(" C");
+        rnlm.addElement(" X");
+        rnlm.addElement(" Y");
+        rnlm.addElement(" Z");
+        rnlm.addElement(" I");
+        rnlm.addElement(" J");
         rnlm.addElement(" ");
-        rnlm.addElement("PC");
-        rnlm.addElement("SP");
-        rnlm.addElement("EX");
+        rnlm.addElement(" PC");
+        rnlm.addElement(" SP");
+        rnlm.addElement(" EX");
 
         regNameList.setBounds(789, 34, 31, 231);
 		frame.getContentPane().add(regNameList);
@@ -97,6 +106,7 @@ public class BasicDebuggerFrame {
 		panel.add(scrollPane_1, BorderLayout.CENTER);
 		
 		codeTextArea = new JTextArea();
+		codeTextArea.setTabSize(4);
 		scrollPane_1.setViewportView(codeTextArea);
 		
 		JPanel panel_1 = new JPanel();
@@ -178,9 +188,11 @@ public class BasicDebuggerFrame {
     	Machine machine = system.machine;
         //System.out.println("enter");
         if(machine!=null){
-            this.memoryTextArea.setText(dump(machine.getMemory()));
+            this.memoryTextArea.setText(dump(machine.getMemory(),machine.getPc(),machine.getSp()));
 
             this.registryList.clear();
+            this.stackListModel.clear();
+
             for(char c:machine.getRegisters()){
                 this.registryList.addElement(convertHex(c));
             }
@@ -198,10 +210,10 @@ public class BasicDebuggerFrame {
                     this.stackListModel.addElement(convertHex(machine.getMemory()[i]));
                 }
             }
+            this.memoryTextArea.setCaretPosition(0);
         }
         else{
             System.err.println("make a machine first");
         }
-        //System.out.println("exit");
     }
 }

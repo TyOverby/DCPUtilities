@@ -1,11 +1,6 @@
 package com.prealpha.dcputil.emulator;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.prealpha.dcputil.emulator.EmulatorHelper.clear;
-import static com.prealpha.dcputil.emulator.EmulatorHelper.isConditional;
-import static com.prealpha.dcputil.emulator.EmulatorHelper.over;
+import static com.prealpha.dcputil.emulator.EmulatorHelper.*;
 import static com.prealpha.dcputil.emulator.Opcodes.*;
 import static com.prealpha.dcputil.emulator.Valuecodes.*;
 import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
@@ -258,15 +253,18 @@ class BaseMachine {
             // have to decrement it one extra time
             //sp--;
             memory[--sp] = data;
+            modified[sp] = true;
             return;
         }
         if(input == PEEK){
             memory[sp] = data;
+            modified[sp] = true;
             return;
         }
         if(input==PICK){
             char place = (char) (sp+memory[pc++]);
             memory[place] = data;
+            modified[place] = true;
             return;
         }
         if(input == SP){
@@ -313,7 +311,13 @@ class BaseMachine {
             return memory[sp];
         }
         if(input==PICK){
-            char place = (char)(sp+memory[pc++]);
+            char place = 0;
+            if(modifyStack){
+                place = (char)(sp+memory[pc++]);
+            }
+            else{
+                place = (char)(sp+memory[pc+1]);
+            }
             return memory[place];
         }
         if(input == SP){
@@ -345,21 +349,20 @@ class BaseMachine {
 
         boolean cond = isConditional(opcode);
 
-        if(cond){
-            char valA = get(opA, false);
-            char valB = get(opB, false);
-            skipUntilNonConditional(runs+1);
-        }
-        else{
-            if(runs==0){
-                char valA = get(opA, false);
-                char valB = get(opB, false);
-            }
-            else{
-                pc--;
-            }
-        }
-
+        //if(cond){
+        char valA = get(opA, false);
+        char valB = get(opB, false);
+//            skipUntilNonConditional(runs+1);
+//        }
+//        else{
+//            if(runs==0){
+//                char valA = get(opA, false);
+//                char valB = get(opB, false);
+//            }
+//            else{
+//                pc--;
+//            }
+//        }
     }
 
 }
