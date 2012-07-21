@@ -102,13 +102,13 @@ class NewBaseMachine {
         char opA      = clear(instruction, 0, B_SIZE+OP_SIZE);
         char opB      = clear(instruction, A_SIZE, B_SIZE);
 
-        int offset = 1;
+        int offset = 0;
         Pointer pa = getPointer(opA, offset, true);
         offset+= getOffset(opA);
         Pointer pb = getPointer(opB, offset, false);
         offset+= getOffset(opB);
 
-        pc += offset-1;
+        pc += offset;
 
         char a = pa.get();
         char b = pb.get();
