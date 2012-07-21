@@ -244,7 +244,7 @@ class NewBaseMachine {
                 }
                 break;
             case IFA:
-                if(b>a){
+                if(shortB>shortA){
                     return;
                 }
                 else{
@@ -252,7 +252,7 @@ class NewBaseMachine {
                 }
                 break;
             case IFL:
-                if(b>a){
+                if(b<a){
                     return;
                 }
                 else{
@@ -260,7 +260,7 @@ class NewBaseMachine {
                 }
                 break;
             case IFU:
-                if(b<a){
+                if(shortB<shortA){
                     return;
                 }
                 else{
