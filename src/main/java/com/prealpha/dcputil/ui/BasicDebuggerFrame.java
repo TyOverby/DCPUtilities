@@ -6,11 +6,10 @@ import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.StepEvent;
 
-import java.awt.*;
-
 import javax.swing.*;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
 import static com.prealpha.dcputil.util.PrintUtilities.dump;
@@ -188,7 +187,7 @@ public class BasicDebuggerFrame {
     	Machine machine = system.machine;
         //System.out.println("enter");
         if(machine!=null){
-            this.memoryTextArea.setText(dump(machine.getMemory(),machine.getPc(),machine.getSp()));
+            this.memoryTextArea.setText(dump(machine.getMemory(),machine.getMask(),machine.getTotalModified(),machine.getPc(),machine.getSp()));
 
             this.registryList.clear();
             this.stackListModel.clear();

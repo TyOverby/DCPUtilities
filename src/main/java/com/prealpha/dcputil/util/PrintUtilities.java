@@ -2,7 +2,10 @@ package com.prealpha.dcputil.util;
 
 import com.prealpha.dcputil.info.Operator;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User: Ty
@@ -76,7 +79,7 @@ public class PrintUtilities {
 
         return sb.toString().substring(1);
     }
-    public static String dump(char[] input,int... highlight){
+    public static String dump(char[] input, int offset, int... highlight){
         StringBuilder sb = new StringBuilder();
         char counter = 0;
         for(int i=0;i<input.length;i++){
@@ -88,7 +91,7 @@ public class PrintUtilities {
             }
 
             if(i%8==0){
-                sb.append("\n"+convertHex(counter)+":\t");
+                sb.append("\n"+convertHex((char) (counter+offset))+":\t");
             }
             sb.append(space+convertHex(input[i])+space);
             counter++;
@@ -102,8 +105,50 @@ public class PrintUtilities {
 
         return sb.toString().substring(1);
     }
+    public static String dump(char[] input,int... highlight){
+        return dump(input, 0, highlight);
+    }
     
     public static String stripLiteral(String input){
         return input.substring(2);
+    }
+
+
+
+    public static String dump(char[] input, boolean[] mask, List<Character> visitedList,int...highlight){
+        Collections.sort(visitedList);
+        Set<Integer> alreadyPrinted  = new HashSet<Integer>();
+        StringBuilder toReturn = new StringBuilder();
+        int lastIndex =0;
+
+        for(int i:visitedList){
+            if(!alreadyPrinted.contains(i)){
+                char offset = (char) (i%8);
+                char index = (char) (i-offset);
+                if(index-lastIndex>8){
+                    toReturn.append("\n");
+                }
+                lastIndex = index;
+                toReturn.append(convertHex(index));
+                toReturn.append(":  ");
+                for(int k = i-offset;k<(i-offset+8);k++){
+                    char h = ' ';
+                    for(int g:highlight){
+                        if(k==g){
+                            h = '#';
+                            break;
+                        }
+                    }
+
+                    alreadyPrinted.add(k);
+                    toReturn.append(h);
+                    toReturn.append(convertHex(input[k]));
+                    toReturn.append(h);
+                }
+                toReturn.append("\n");
+            }
+        }
+
+        return toReturn.toString();
     }
 }

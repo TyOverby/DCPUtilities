@@ -1,5 +1,8 @@
 package com.prealpha.dcputil.emulator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.prealpha.dcputil.emulator.EmulatorHelper.*;
 import static com.prealpha.dcputil.emulator.NewBaseMachine.PointerType.*;
 import static com.prealpha.dcputil.emulator.Opcodes.*;
@@ -57,6 +60,7 @@ class NewBaseMachine {
                 case POINTER_MEMORY:
                     memory[pointer]   = data;
                     modified[pointer] = true;
+                    modifiedList.add(pointer);
                     break;
                 case POINTER_REGISTER:
                     registers[pointer] = data;
@@ -89,11 +93,17 @@ class NewBaseMachine {
 
     protected char[] lastProgram;
     protected char[] memory = new char[0xffff+1];
+
     protected boolean[] modified = new boolean[memory.length];
+    protected List<Character> modifiedList = new ArrayList<Character>();
 
     public void load(char[] program){
         System.arraycopy(program, 0, memory, 0, program.length);
         lastProgram = program.clone();
+        for(char i=0;i<program.length;i++){
+            modified[i] = true;
+            modifiedList.add(i);
+        }
     }
 
     public void step() throws EmulatorException {
@@ -114,8 +124,8 @@ class NewBaseMachine {
         char b = pb.get();
 
 
-        short shortB = (short) a;
-        short shortA = (short) b;
+        short shortB = (short) b;
+        short shortA = (short) a;
 
         switch (opcode){
             case SET:
@@ -211,28 +221,28 @@ class NewBaseMachine {
                     return;
                 }
                 else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFC:
                 if((b&a)==0){
                     return;
                 }else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFE:
                 if(b==a){
                     return;
                 }else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFN:
                 if(b!=a){
                     return;
                 }else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFG:
@@ -240,7 +250,7 @@ class NewBaseMachine {
                     return;
                 }
                 else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFA:
@@ -248,7 +258,7 @@ class NewBaseMachine {
                     return;
                 }
                 else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFL:
@@ -256,15 +266,16 @@ class NewBaseMachine {
                     return;
                 }
                 else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case IFU:
+                System.out.println(shortB+"<"+shortA);
                 if(shortB<shortA){
                     return;
                 }
                 else{
-                    skipUntilNonConditional(0);
+                    skipUntilNonConditional();
                 }
                 break;
             case ADX:
@@ -485,7 +496,7 @@ class NewBaseMachine {
         }
     }
 
-    private void skipUntilNonConditional(int runs) throws EmulatorException {
+    private void skipUntilNonConditional() throws EmulatorException {
         char instruction = memory[pc++];
         char opcode   = clear(instruction, A_SIZE+B_SIZE, 0);
         char opA      = clear(instruction, 0, B_SIZE+OP_SIZE);
@@ -496,17 +507,11 @@ class NewBaseMachine {
 
         if(cond){
             pc += (getOffset(opA)+getOffset(opB));
-            skipUntilNonConditional(0);
+            skipUntilNonConditional();
         }
         else{
-            if(runs==0){
-                pc += (getOffset(opA)+getOffset(opB));
-                return;
-            }
-            else{
-                pc--;
-                return;
-            }
+            pc += (getOffset(opA)+getOffset(opB));
+            return;
         }
 
     }

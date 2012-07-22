@@ -72,6 +72,12 @@ public class Machine extends NewBaseMachine{
     public char[] getMemory() {
         return memory;
     }
+    public boolean[] getMask(){
+        return this.modified;
+    }
+    public List<Character> getTotalModified(){
+        return this.modifiedList;
+    }
     public boolean isModified(int i) {
         return modified[i];
     }
