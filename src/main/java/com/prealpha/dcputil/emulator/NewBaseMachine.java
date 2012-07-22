@@ -302,10 +302,11 @@ class NewBaseMachine {
             case SPECIAL:
                 switch (opB){
                     case JSR:
-                        opB = PUSH_POP;
-                        b = pc;
+                        memory[--sp] = pc;
+                        modified[sp] = true;
+                        modifiedList.add(sp);
                         pc = a;
-                        break;
+                        return;
                     case BRK:
                         this.isRunning = false;
                         return;
