@@ -7,10 +7,11 @@ import com.prealpha.dcputil.emulator.Machine;
  * Date: 7/21/12
  * Time: 8:47 PM
  */
-public class Lem1802 implements Device{
+public class Lem1802 implements Device {
     private char screenLocation;
     private char fontLocation;
     private char paletteLocation;
+    private char borderColor;
 
     @Override
     public char[] getId() {
@@ -37,11 +38,33 @@ public class Lem1802 implements Device{
 
     @Override
     public void hwi(Machine machine) {
+        char a = machine.getRegisters()[0];
+        char b = machine.getRegisters()[1];
+        switch(a){
+            case 0:
+                this.screenLocation = b;
+                break;
+            case 1:
+                this.fontLocation = b;
+                break;
+            case 2:
+                this.paletteLocation = b;
+                break;
+            case 3:
+                this.borderColor = b;
+                break;
+            case 4:
+                System.err.println("MEM_DUMP_FONT not yet supported");
+                break;
 
+            case 5:
+                System.err.println("MEM_DUMP_PALETTE not yet supported");
+                break;
+        }
     }
 
     @Override
     public void update(Machine machine) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 }

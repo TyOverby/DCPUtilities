@@ -2,10 +2,7 @@ package com.prealpha.dcputil.util;
 
 import com.prealpha.dcputil.info.Operator;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: Ty
@@ -35,6 +32,18 @@ public class PrintUtilities {
         return sb.toString();
     }
 
+    private static String convertBin(int value) {
+        StringBuilder sb = new StringBuilder(Integer.toBinaryString(value));
+        while(sb.length()<32){
+            sb.insert(0,"0");
+        }
+        int i=0;
+        sb.insert(8+i++,"\n");
+        sb.insert(16+i++,"\n");
+        sb.insert(24+i++,"\n");
+        return sb.toString();
+    }
+
     public static String convertOp(char value){
         StringBuilder sb = new StringBuilder(convertBin(value).replace(" ",""));
         sb.insert(Operator.A_SIZE," ");
@@ -52,6 +61,10 @@ public class PrintUtilities {
     public static void printBin(char value){
         System.out.println(convertBin(value));
     }
+    public static void printBin(int value){
+        System.out.print(convertBin(value));
+    }
+
     public static void printOp(char value){
         System.out.println(convertOp(value));
     }
@@ -132,6 +145,7 @@ public class PrintUtilities {
                 toReturn.append(convertHex(index));
                 toReturn.append(":  ");
                 for(int k = i-offset;k<(i-offset+8);k++){
+
                     char h = ' ';
                     for(int g:highlight){
                         if(k==g){
