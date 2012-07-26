@@ -4,12 +4,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.mycompany.dcputil</groupId>
+  <groupId>com.prealpha.dcputil</groupId>
   <artifactId>DCPUtilities</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>DCPUtilities</name>
-  <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
