@@ -5,6 +5,7 @@ import com.prealpha.dcputil.defaults.BasicSystem;
 import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.StepEvent;
+import com.prealpha.dcputil.ui.layout.TyLayout;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 
 import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
 import static com.prealpha.dcputil.util.PrintUtilities.dump;
+import javax.swing.border.TitledBorder;
 
 public class BasicDebuggerFrame {
 
@@ -21,8 +23,8 @@ public class BasicDebuggerFrame {
 	private JFrame frame;
 	private JTextArea codeTextArea;
 	private JTextPane memoryTextArea;
-    DefaultListModel<String> registryList;
-    DefaultListModel<String> stackListModel;
+    DefaultListModel registryList;
+    DefaultListModel stackListModel;
 
     /**
 	 * Launch the application.
@@ -52,9 +54,9 @@ public class BasicDebuggerFrame {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 944, 759);
+		frame.setBounds(100, 100, 921, 612);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(new TyLayout());
 
         try {
             // Set cross-platform Java L&F (also called "Metal")
@@ -65,13 +67,9 @@ public class BasicDebuggerFrame {
             // Don't do anything, we don't really care about the look and feel.
         }
 
-        registryList = new DefaultListModel<String>();
-		JList regList = new JList(registryList);
-		regList.setBounds(830, 34, 88, 231);
-		frame.getContentPane().add(regList);
+        registryList = new DefaultListModel();
 
-        DefaultListModel<String> rnlm = new DefaultListModel<String>();
-        JList regNameList = new JList(rnlm);
+        DefaultListModel rnlm = new DefaultListModel();
         rnlm.addElement(" A");
         rnlm.addElement(" B");
         rnlm.addElement(" C");
@@ -85,17 +83,46 @@ public class BasicDebuggerFrame {
         rnlm.addElement(" SP");
         rnlm.addElement(" EX");
 
-        regNameList.setBounds(789, 34, 31, 231);
-		frame.getContentPane().add(regNameList);
-
-        stackListModel = new DefaultListModel<String>();
-		JList stackList = new JList(stackListModel);
-		stackList.setBounds(789, 298, 129, 412);
-		frame.getContentPane().add(stackList);
+        stackListModel = new DefaultListModel();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(10, 34, 769, 676);
-		frame.getContentPane().add(tabbedPane);
+		tabbedPane.setBounds(10, 89, 454, 427);
+		
+		
+		JPanel debugPane = new JPanel();
+		debugPane.setBorder(new TitledBorder(null, "Debug Info", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		debugPane.setBounds(723, 12, 176, 560);
+		
+		debugPane.setLayout(null);
+		
+		JPanel buttonsPane = new JPanel();
+		buttonsPane.setBounds(10, 12, 531, 23);
+		buttonsPane.setLayout(null);
+		
+		// RESIZING
+		final int TOP_HEIGHT = 25;
+		final int DEBUG_WIDTH = 175;
+		
+		frame.getContentPane().add(buttonsPane,new TyLayout.Resize() {
+			public Rectangle resize(Component parent) {
+				return new Rectangle(0,0,parent.getWidth()-DEBUG_WIDTH,TOP_HEIGHT);
+			}
+		});
+		frame.getContentPane().add(debugPane,new TyLayout.Resize() {
+			public Rectangle resize(Component parent) {
+				return new Rectangle(parent.getWidth()-DEBUG_WIDTH,0,DEBUG_WIDTH,parent.getHeight());
+			}
+		});
+		frame.getContentPane().add(tabbedPane,new TyLayout.Resize() {
+			public Rectangle resize(Component parent) {
+				return new Rectangle(0,TOP_HEIGHT,parent.getWidth()-DEBUG_WIDTH,parent.getHeight()-TOP_HEIGHT);
+			}
+		});
+		// END RESIZING
+		
+		
+		
+		
 		
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Code", null, panel, null);
@@ -119,48 +146,46 @@ public class BasicDebuggerFrame {
 		memoryTextArea.setFont(new Font("Monospaced", Font.PLAIN, 15));
 		scrollPane.setViewportView(memoryTextArea);
 		
+		
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setBorder(new TitledBorder(null, "Registers", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_3.setBounds(10, 21, 156, 272);
+		debugPane.add(panel_3);
+		panel_3.setLayout(null);
+		JList regNameList = new JList(rnlm);
+		regNameList.setBounds(10, 22, 31, 239);
+		panel_3.add(regNameList);
+		JList regList = new JList(registryList);
+		regList.setBounds(51, 22, 88, 239);
+		panel_3.add(regList);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setBorder(new TitledBorder(null, "Stack", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_4.setBounds(10, 304, 156, 245);
+		debugPane.add(panel_4);
+		panel_4.setLayout(null);
+		JList stackList = new JList(stackListModel);
+		stackList.setBounds(10, 11, 136, 223);
+		panel_4.add(stackList);
+		
+		
+		
 		JButton btnCompile = new JButton("Compile");
-		btnCompile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-                BasicDebuggerFrame.this.system = new BasicSystem();
-                try {
-					BasicDebuggerFrame.this.system.load(BasicDebuggerFrame.this.codeTextArea.getText());
-					onTick(BasicDebuggerFrame.this.system);
-                    scrollPane.scrollRectToVisible(new Rectangle(0,0,0,0));
-				} catch (ParserException e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		btnCompile.setBounds(10, 8, 89, 23);
-		frame.getContentPane().add(btnCompile);
+		btnCompile.setBounds(0, 0, 89, 23);
+		buttonsPane.add(btnCompile);
 		
 		JButton btnStep = new JButton("Step");
-		btnStep.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-                try {
-                    System.out.println("enter");
-                    BasicDebuggerFrame.this.system.step();
-                    System.out.println("exit");
-                    //System.err.println((int)BasicDebuggerFrame.this.system.machine.getRegisters()[0]);
-                } catch (EmulatorException e) {
-                    e.printStackTrace();
-                }
-                onTick(BasicDebuggerFrame.this.system);
-			}
-		});
-		btnStep.setBounds(109, 8, 89, 23);
-		frame.getContentPane().add(btnStep);
-		
-		JLabel lblRegisters = new JLabel("Registers");
-		lblRegisters.setBounds(789, 9, 46, 14);
-		frame.getContentPane().add(lblRegisters);
-		
-		JLabel lblStack = new JLabel("Stack");
-		lblStack.setBounds(789, 276, 46, 14);
-		frame.getContentPane().add(lblStack);
+		btnStep.setBounds(99, 0, 89, 23);
+		buttonsPane.add(btnStep);
 		
 		JButton btnRun = new JButton("Run");
+		btnRun.setBounds(198, 0, 89, 23);
+		buttonsPane.add(btnRun);
+		
+		JButton btnStop = new JButton("Stop");
+		btnStop.setBounds(297, 0, 89, 23);
+		buttonsPane.add(btnStop);
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -175,12 +200,31 @@ public class BasicDebuggerFrame {
 				}
 			}
 		});
-		btnRun.setBounds(208, 8, 89, 23);
-		frame.getContentPane().add(btnRun);
-		
-		JButton btnStop = new JButton("Stop");
-		btnStop.setBounds(307, 8, 89, 23);
-		frame.getContentPane().add(btnStop);
+		btnStep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+                try {
+                    System.out.println("enter");
+                    BasicDebuggerFrame.this.system.step();
+                    System.out.println("exit");
+                    //System.err.println((int)BasicDebuggerFrame.this.system.machine.getRegisters()[0]);
+                } catch (EmulatorException e) {
+                    e.printStackTrace();
+                }
+                onTick(BasicDebuggerFrame.this.system);
+			}
+		});
+		btnCompile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+                BasicDebuggerFrame.this.system = new BasicSystem();
+                try {
+					BasicDebuggerFrame.this.system.load(BasicDebuggerFrame.this.codeTextArea.getText());
+					onTick(BasicDebuggerFrame.this.system);
+                    scrollPane.scrollRectToVisible(new Rectangle(0,0,0,0));
+				} catch (ParserException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
     private void onTick(BasicSystem system){
