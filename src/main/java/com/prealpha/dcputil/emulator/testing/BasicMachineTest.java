@@ -5,6 +5,8 @@ import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.testing.EndOfMemoryException;
 import com.prealpha.dcputil.emulator.testing.TestMachine;
 
+import java.util.List;
+
 /**
  * User: Ty
  * Date: 7/26/12
@@ -18,6 +20,14 @@ abstract public class BasicMachineTest {
     public void test(String program) throws ParserException, EmulatorException, EndOfMemoryException {
         tm.load(program);
         tm.test();
+    }
+    public void test(List<String> program) throws EmulatorException, EndOfMemoryException, ParserException {
+        StringBuilder sb = new StringBuilder();
+        for(String s: program){
+            sb.append(s);
+            sb.append("\n");
+        }
+        test(sb.toString());
     }
     public char[] getReg(){
         return tm.getRegisters();
