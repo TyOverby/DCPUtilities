@@ -214,12 +214,13 @@ class BaseMachine {
                 b^=a;
                 break;
             case SHR:
-                ex = (char) (((b<<16)>>a)&0xffff);
+                ex = (char) (((shortB<<16)>>shortA)&0xffff);
                 b>>>=a;
                 break;
             case ASR:
-                ex = (char) (((b<<16)>>>a)&0xffff);
-                b>>=a;
+                ex = (char) (((shortB<<16)>>>shortA)&0xffff);
+                shortB>>=shortA;
+                b = (char) shortB;
                 break;
             case SHL:
                 ex = (char) (((b<<a)>>16)&0xffff);
