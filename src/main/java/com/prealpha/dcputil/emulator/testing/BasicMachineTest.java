@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.machine;
+package com.prealpha.dcputil.emulator.testing;
 
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.emulator.EmulatorException;

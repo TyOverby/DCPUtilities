@@ -2,6 +2,7 @@ package com.prealpha.dcputil.machine;
 
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.emulator.EmulatorException;
+import com.prealpha.dcputil.emulator.testing.BasicMachineTest;
 import com.prealpha.dcputil.emulator.testing.EndOfMemoryException;
 import org.junit.Test;
 
