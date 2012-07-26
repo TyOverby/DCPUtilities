@@ -1,13 +1,11 @@
 package com.prealpha.dcputil.emulator;
 
-import com.prealpha.dcputil.emulator.testing.EndOfMemoryException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Machine extends NewBaseMachine{
+public class Machine extends BaseMachine {
 
 
     public void run() throws EmulatorException {

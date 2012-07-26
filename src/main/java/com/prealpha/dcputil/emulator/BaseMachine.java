@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.prealpha.dcputil.emulator.EmulatorHelper.*;
-import static com.prealpha.dcputil.emulator.NewBaseMachine.PointerType.*;
+import static com.prealpha.dcputil.emulator.BaseMachine.PointerType.*;
 import static com.prealpha.dcputil.emulator.Opcodes.*;
 import static com.prealpha.dcputil.emulator.Valuecodes.*;
 import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
@@ -14,7 +14,7 @@ import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
  * Date: 7/19/12
  * Time: 11:46 AM
  */
-class NewBaseMachine {
+class BaseMachine {
     public static enum PointerType{
         POINTER_MEMORY,
         POINTER_REGISTER,
@@ -282,7 +282,6 @@ class NewBaseMachine {
                 }
                 break;
             case IFU:
-                System.out.println(shortB+"<"+shortA);
                 if(shortB<shortA){
                     return;
                 }
