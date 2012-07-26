@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 7/17/12
  * Time: 5:59 AM
  */
-public class CompilerTest {
+abstract public class CompilerTest {
 
 
     protected void assertEqual(char[] expected, char[] actual){

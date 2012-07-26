@@ -1,9 +1,9 @@
 package com.prealpha.dcputil.compiler.parser;
 
-import com.prealpha.dcputil.info.Operator;
-import com.prealpha.dcputil.info.Operator.OperatorPack;
-import com.prealpha.dcputil.info.Value;
-import com.prealpha.dcputil.info.Value.ValuePack;
+import com.prealpha.dcputil.compiler.info.Operator;
+import com.prealpha.dcputil.compiler.info.Operator.OperatorPack;
+import com.prealpha.dcputil.compiler.info.Value;
+import com.prealpha.dcputil.compiler.info.Value.ValuePack;
 import com.prealpha.dcputil.compiler.lexer.Expression;
 import com.prealpha.dcputil.compiler.lexer.Token;
 

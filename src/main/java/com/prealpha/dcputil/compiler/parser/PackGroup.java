@@ -1,7 +1,7 @@
 package com.prealpha.dcputil.compiler.parser;
 
-import com.prealpha.dcputil.info.Operator;
-import com.prealpha.dcputil.info.Value;
+import com.prealpha.dcputil.compiler.info.Operator;
+import com.prealpha.dcputil.compiler.info.Value;
 
 import java.util.List;
 

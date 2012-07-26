@@ -1,4 +1,4 @@
-package com.prealpha.dcputil.info.data;
+package com.prealpha.dcputil.compiler.info.data;
 
 import java.util.ArrayList;
 import java.util.Iterator;

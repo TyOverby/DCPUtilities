@@ -1,8 +1,8 @@
-package com.prealpha.dcputil.info;
+package com.prealpha.dcputil.compiler.info;
 
 
-import com.prealpha.dcputil.info.data.Keeper;
-import com.prealpha.dcputil.info.data.Pack;
+import com.prealpha.dcputil.compiler.info.data.Keeper;
+import com.prealpha.dcputil.compiler.info.data.Pack;
 
 /**
  * User: Ty

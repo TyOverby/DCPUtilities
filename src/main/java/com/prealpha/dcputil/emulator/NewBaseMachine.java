@@ -97,7 +97,19 @@ class NewBaseMachine {
     protected boolean[] modified = new boolean[memory.length];
     protected List<Character> modifiedList = new ArrayList<Character>();
 
+    private void reset(){
+        for(int i=0;i<memory.length;i++){
+            memory[i] = 0;
+        }
+        for(int i=0;i<registers.length;i++){
+            registers[i] = 0;
+        }
+        sp = 0;
+        pc = 0;
+        ex = 0;
+    }
     public void load(char[] program){
+        reset();
         System.arraycopy(program, 0, memory, 0, program.length);
         lastProgram = program.clone();
         for(char i=0;i<program.length;i++){

@@ -1,6 +1,6 @@
 package com.prealpha.dcputil.util;
 
-import com.prealpha.dcputil.info.Operator;
+import com.prealpha.dcputil.compiler.info.Operator;
 
 import java.util.*;
 

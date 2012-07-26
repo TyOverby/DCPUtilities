@@ -2,8 +2,7 @@ package com.prealpha.dcputil.compiler.assembler;
 
 import com.prealpha.dcputil.compiler.parser.PackGroup;
 import com.prealpha.dcputil.compiler.parser.ParserException;
-import com.prealpha.dcputil.info.Operator;
-import com.prealpha.dcputil.info.Value.ValuePack;
+import com.prealpha.dcputil.compiler.info.Value.ValuePack;
 import com.prealpha.dcputil.compiler.lexer.Expression;
 
 import java.util.ArrayList;
