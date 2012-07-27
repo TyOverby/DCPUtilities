@@ -27,7 +27,7 @@ public class Parser {
     public List<PackGroup> parse(List<Expression> expressions) throws ParserException {
         this.counter=0;
         this.labelToLine.clear();
-        this.packToLable.clear();
+        this.packToLabel.clear();
         List<PackGroup> toReturn = new ArrayList<PackGroup>(expressions.size());
         for(Expression expression:expressions){
             PackGroup pg = parseExpression(expression);
