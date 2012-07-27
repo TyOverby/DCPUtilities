@@ -1,5 +1,6 @@
 package com.prealpha.dcputil.emulator.devices;
 
+import com.prealpha.dcputil.emulator.BaseMachine;
 import com.prealpha.dcputil.emulator.Machine;
 
 /**
@@ -11,7 +12,7 @@ interface Device {
     public char[] getId();
     public char[] getManufacturer();
     public char   getVersion();
-    public void   hwi(Machine machine);
-    void update(Machine machine);
+    public void   hwi(BaseMachine machine);
+    void update(BaseMachine machine);
 
 }

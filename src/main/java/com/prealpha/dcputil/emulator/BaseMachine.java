@@ -1,5 +1,7 @@
 package com.prealpha.dcputil.emulator;
 
+import com.prealpha.dcputil.emulator.devices.DeviceManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
  * Date: 7/19/12
  * Time: 11:46 AM
  */
-class BaseMachine {
+public class BaseMachine {
     public static enum PointerType{
         POINTER_MEMORY,
         POINTER_REGISTER,
@@ -93,6 +95,8 @@ class BaseMachine {
 
     protected char[] lastProgram;
     protected char[] memory = new char[0xffff+1];
+
+    private DeviceManager deviceManager = new DeviceManager();
 
     protected boolean[] modified = new boolean[memory.length];
     protected List<Character> modifiedList = new ArrayList<Character>();
@@ -328,7 +332,10 @@ class BaseMachine {
                     case FRI:
                     case IAQ:
                     case HWN:
+                        pa.set(deviceManager.hwn(this));
+                        return;
                     case HWQ:
+
                     case HWI:
                         throw new EmulatorException("Operation not accepted"+convertHex(opB),pc);
                 }
@@ -387,108 +394,6 @@ class BaseMachine {
         throw new EmulatorException("cant identify ValueCode: "+(int) input,pc);
     }
 
-//    private void set(char opB, char data){
-//        if(opB <= REGISTER_MAX){
-//            registers[opB] = data;
-//            return;
-//        }
-//        if(opB <= POINTER_REGISTER_MAX){
-//            memory[registers[opB-POINT_A]] = data;
-//            return;
-//        }
-//        if(opB <= POINTER_REGISTER_NEXT_MAX){
-//            memory[registers[opB-POINT_A_NEXT]+memory[pc++]] = data;
-//            return;
-//        }
-//        if(opB == PUSH_POP){
-//            memory[--sp] = data;
-//            modified[sp] = true;
-//            return;
-//        }
-//        if(opB == PEEK){
-//            memory[sp] = data;
-//            modified[sp] = true;
-//            return;
-//        }
-//        if(opB==PICK){
-//            char place = (char) (sp+memory[pc++]);
-//            memory[place] = data;
-//            modified[place] = true;
-//            return;
-//        }
-//        if(opB == SP){
-//            sp = data;
-//            return;
-//        }
-//        if(opB == PC){
-//            pc = data;
-//            return;
-//        }
-//        if(opB == EX){
-//            ex = data;
-//            return;
-//        }
-//        if(opB == POINT_NEXT){
-//            memory[memory[pc++]] = data;
-//        }
-//        if(opB == NEXT){
-//            memory[pc++] = data;
-//        }
-//    }
-//
-//    private char valueOf(char input, boolean isA) throws EmulatorException {
-//        if(input <= REGISTER_MAX){
-//            return registers[input];
-//        }
-//        if(input <= POINTER_REGISTER_MAX){
-//            return memory[registers[input-POINT_A]];
-//        }
-//        if(input <= POINTER_REGISTER_NEXT_MAX){
-//            return memory[registers[input-POINT_A_NEXT]+memory[pc++]];
-//        }
-//        if(input == PUSH_POP){
-//            if(isA){
-//                return memory[sp++];
-//            }
-//            else{
-//                return 0xffff;
-//            }
-//        }
-//        if(input == PEEK){
-//            return memory[sp];
-//        }
-//        if(input==PICK){
-//            char place = 0;
-//            if(isA){
-//                 place = (char)(sp+memory[pc++]);
-//            }
-//            else{
-//                 place = (char)(sp+memory[pc+1]);
-//            }
-//            return place;
-//
-//        }
-//        if(input == SP){
-//            return sp;
-//        }
-//        if(input == PC){
-//            return pc;
-//        }
-//        if(input == EX){
-//            return ex;
-//        }
-//        if(input == POINT_NEXT){
-//            return memory[memory[pc++]];
-//        }
-//        if(input == NEXT){
-//            return memory[pc++];
-//        }
-//        if(input>=LITERAL_MIN && input<=LITERAL_MAX){
-//            return (char)(input-0x21);
-//        }
-//        throw new EmulatorException("can not decode value: "+(int)input,pc);
-//    }
-
     private char getOffset(char valueCode){
         switch(valueCode){
             case POINT_A_NEXT:
@@ -526,7 +431,6 @@ class BaseMachine {
             pc += (getOffset(opA)+getOffset(opB));
             return;
         }
-
     }
 
 }

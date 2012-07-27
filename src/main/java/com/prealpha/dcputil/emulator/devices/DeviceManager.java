@@ -1,5 +1,6 @@
 package com.prealpha.dcputil.emulator.devices;
 
+import com.prealpha.dcputil.emulator.BaseMachine;
 import com.prealpha.dcputil.emulator.Machine;
 
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import java.util.List;
 public class DeviceManager {
     private List<Device> devices = new ArrayList<Device>();
 
-    public void hwn(Machine machine){
-        machine.getRegisters()[0]= (char) devices.size();
+    public void hwn(BaseMachine machine){
+        machine.registers()[0]= (char) devices.size();
     }
 
     public void hwq(Machine machine, char dev){
@@ -29,11 +30,11 @@ public class DeviceManager {
         machine.getRegisters()[4]= device.getVersion();
     }
 
-    public void hwi(Machine machine, char device){
+    public void hwi(BaseMachine machine, char device){
         devices.get(device).hwi(machine);
     }
 
-    public void update(Machine machine){
+    public void update(BaseMachine machine){
         for(Device device:devices){
             device.update(machine);
         }
