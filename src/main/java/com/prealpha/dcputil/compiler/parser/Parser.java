@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class Parser {
     private int counter = 0;
     private Map<String,Integer> labelToLine = new HashMap<String,Integer>();
-    private Map<ValuePack,String> packToLable = new HashMap<ValuePack, String>();
+    private Map<ValuePack,String> packToLabel = new HashMap<ValuePack, String>();
 
     public List<PackGroup> parse(List<Expression> expressions) throws ParserException {
         this.counter=0;
@@ -40,17 +40,11 @@ public class Parser {
     }
 
     private void fillLabels() throws ParserException {
-        for(ValuePack vp:packToLable.keySet()){
-            boolean isFixed = false;
-            for(String s:labelToLine.keySet()){
-                if(s.equals(packToLable.get(vp))){
-                    vp.setData((char)(int)labelToLine.get(s));
-                    isFixed = true;
-                    break;
-                }
-            }
-            if(!isFixed){
-                throw new ParserException("Can not find label for: \""+packToLable.get(vp)+"\".  on line "+vp.lineNum+
+        for(ValuePack vp: packToLabel.keySet()){
+            if (labelToLine.containsKey(packToLabel.get(vp))) {
+                vp.setData((char)(int)labelToLine.get(packToLabel.get(vp)));
+            } else {
+                throw new ParserException("Can not find label for: \""+ packToLabel.get(vp)+"\".  on line "+vp.lineNum+
                         ".\nLabel does not exist or you are trying to access items like [PC] or IA",vp.lineNum);
             }
         }
@@ -184,7 +178,7 @@ public class Parser {
         Matcher nextM = literal.matcher(original);
         if(nextM.matches()){
             char next = parseSingular(nextM.group(1),line);
-            if(next<=30 && position == 2){
+            if ((next == 0xffff || next <= 30) && position == 2){
                 return Value.values.get(""+(int)next).clone();
             }
             else{
@@ -226,7 +220,7 @@ public class Parser {
     }
 
     private void register(ValuePack vp, String label){
-        packToLable.put(vp,label);
+        packToLabel.put(vp, label);
     }
     private void register(String label, int line){
         labelToLine.put(label,line);
