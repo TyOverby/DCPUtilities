@@ -2,8 +2,8 @@ package com.prealpha.dcputil.ui;
 
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.defaults.BasicSystem;
-import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.Machine;
+import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.StepEvent;
 import com.prealpha.dcputil.ui.layout.TyLayout;
 

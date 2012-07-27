@@ -2,15 +2,15 @@ package com.prealpha.dcputil.emulator.testing;
 
 import com.prealpha.dcputil.compiler.defaults.BasicAssembler;
 import com.prealpha.dcputil.compiler.parser.ParserException;
-import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.Machine;
+import com.prealpha.dcputil.emulator.EmulatorException;
 
 /**
  * User: Ty
  * Date: 7/26/12
  * Time: 5:53 AM
  */
-public class TestMachine extends Machine{
+public class TestMachine extends Machine {
     private final BasicAssembler assembler = new BasicAssembler();
 
     public void load(String program) throws ParserException {

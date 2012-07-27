@@ -2,8 +2,8 @@ package com.prealpha.dcputil.defaults;
 
 import com.prealpha.dcputil.compiler.defaults.BasicAssembler;
 import com.prealpha.dcputil.compiler.parser.ParserException;
-import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.Machine;
+import com.prealpha.dcputil.emulator.EmulatorException;
 
 /**
  * User: Ty

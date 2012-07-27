@@ -1,16 +1,11 @@
 package com.prealpha.dcputil;
 
 import com.prealpha.dcputil.compiler.assembler.CompilerTest;
-import com.prealpha.dcputil.compiler.lexer.Expression;
-import com.prealpha.dcputil.compiler.lexer.Lexer;
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.defaults.BasicSystem;
-import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.Machine;
+import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.StepEvent;
-import org.junit.Test;
-
-import static com.prealpha.dcputil.util.PrintUtilities.*;
 
 /**
  * User: Ty

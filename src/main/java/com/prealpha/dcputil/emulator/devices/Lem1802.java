@@ -1,6 +1,5 @@
 package com.prealpha.dcputil.emulator.devices;
 
-import com.prealpha.dcputil.emulator.BaseMachine;
 import com.prealpha.dcputil.emulator.Machine;
 
 /**
@@ -177,7 +176,7 @@ public abstract class Lem1802 implements Device {
     }
 
     @Override
-    public void hwi(BaseMachine machine) {
+    public void hwi(Machine machine) {
         this.isConnected = true;
         char a = machine.getRegisters()[0];
         char b = machine.getRegisters()[1];
@@ -223,7 +222,7 @@ public abstract class Lem1802 implements Device {
     }
 
     @Override
-    public void update(BaseMachine machine) {
+    public void update(Machine machine) {
        if(this.isConnected){
            for(char i=this.screenLocation;i<(this.screenLocation+386);i++){
                 print(i,machine);
