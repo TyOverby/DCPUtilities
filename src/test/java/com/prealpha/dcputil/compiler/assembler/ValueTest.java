@@ -1,10 +1,6 @@
 package com.prealpha.dcputil.compiler.assembler;
 
-import com.prealpha.dcputil.compiler.parser.ParserException;
 import org.junit.Test;
-
-import static com.prealpha.dcputil.util.PrintUtilities.dump;
-import static com.prealpha.dcputil.util.PrintUtilities.printOp;
 
 /**
  * User: Ty
@@ -153,11 +149,15 @@ public class ValueTest extends CompilerTest{
     @Test
     public void testALiterals(){
         {
+            String input = "SET A 0xffff";
+            char[] expected = {0x8001};
+            assertEqual(expected,compile(input));
+        }
+        {
             String input = "SET A 0";
             char[] expected = {0x8401};
             assertEqual(expected,compile(input));
         }
-
         {
             String input = "SET A 1";
             char[] expected = {0x8801};
@@ -166,11 +166,6 @@ public class ValueTest extends CompilerTest{
         {
             String input = "SET A 10";
             char[] expected = {0xac01};
-            assertEqual(expected,compile(input));
-        }
-        {
-            String input = "SET A 30";
-            char[] expected = {0xfc01};
             assertEqual(expected,compile(input));
         }
         {

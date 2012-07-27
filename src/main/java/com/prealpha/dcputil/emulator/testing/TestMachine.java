@@ -24,7 +24,7 @@ public class TestMachine extends Machine{
         while(this.isRunning){
             this.step();
 
-            if(this.pc>Character.MAX_VALUE-10){
+            if(this.pc >= this.sp && this.sp > 0) {
                 this.isRunning = false;
                 throw new EndOfMemoryException();
             }
