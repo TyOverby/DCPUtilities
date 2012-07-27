@@ -54,7 +54,6 @@ public class Assembler {
                     break;
                 default:
                     toReturn.add(Builder.makeSpecialInstruction(pg.operator, new ValuePack((char) 0x0, 0, "")));
-                    //System.err.println("Can't handle operator with "+pg.values.size()+" arguments.");
             }
         }
         else{

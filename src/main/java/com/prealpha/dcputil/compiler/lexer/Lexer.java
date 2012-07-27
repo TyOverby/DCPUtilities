@@ -51,7 +51,7 @@ public class Lexer {
             }
 
             if(tokens.size()>0){
-                expressions.add(new Expression(tokens.toArray(new Token[0])));
+                expressions.add(new Expression(tokens.toArray(new Token[tokens.size()])));
             }
         }
         return expressions;

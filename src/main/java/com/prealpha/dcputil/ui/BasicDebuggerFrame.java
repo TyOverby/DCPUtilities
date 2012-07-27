@@ -23,8 +23,8 @@ public class BasicDebuggerFrame {
 	private JFrame frame;
 	private JTextArea codeTextArea;
 	private JTextPane memoryTextArea;
-    DefaultListModel registryList;
-    DefaultListModel stackListModel;
+    DefaultListModel<String> registryList;
+    DefaultListModel<String> stackListModel;
 
     /**
 	 * Launch the application.
@@ -55,7 +55,7 @@ public class BasicDebuggerFrame {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 921, 612);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new TyLayout());
 
         try {
@@ -67,9 +67,9 @@ public class BasicDebuggerFrame {
             // Don't do anything, we don't really care about the look and feel.
         }
 
-        registryList = new DefaultListModel();
+        registryList = new DefaultListModel<String>();
 
-        DefaultListModel rnlm = new DefaultListModel();
+        DefaultListModel<String> rnlm = new DefaultListModel<String>();
         rnlm.addElement(" A");
         rnlm.addElement(" B");
         rnlm.addElement(" C");
@@ -83,7 +83,7 @@ public class BasicDebuggerFrame {
         rnlm.addElement(" SP");
         rnlm.addElement(" EX");
 
-        stackListModel = new DefaultListModel();
+        stackListModel = new DefaultListModel<String>();
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(10, 89, 454, 427);
@@ -153,10 +153,10 @@ public class BasicDebuggerFrame {
 		panel_3.setBounds(10, 21, 156, 272);
 		debugPane.add(panel_3);
 		panel_3.setLayout(null);
-		JList regNameList = new JList(rnlm);
+		JList<String> regNameList = new JList<String>(rnlm);
 		regNameList.setBounds(10, 22, 31, 239);
 		panel_3.add(regNameList);
-		JList regList = new JList(registryList);
+		JList<String> regList = new JList<String>(registryList);
 		regList.setBounds(51, 22, 88, 239);
 		panel_3.add(regList);
 		
@@ -165,7 +165,7 @@ public class BasicDebuggerFrame {
 		panel_4.setBounds(10, 304, 156, 245);
 		debugPane.add(panel_4);
 		panel_4.setLayout(null);
-		JList stackList = new JList(stackListModel);
+		JList<String> stackList = new JList<String>(stackListModel);
 		stackList.setBounds(10, 11, 136, 223);
 		panel_4.add(stackList);
 		

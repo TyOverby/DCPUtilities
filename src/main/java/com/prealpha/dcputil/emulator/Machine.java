@@ -2,10 +2,7 @@ package com.prealpha.dcputil.emulator;
 
 import com.prealpha.dcputil.emulator.devices.DeviceManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static com.prealpha.dcputil.emulator.EmulatorHelper.*;
 import static com.prealpha.dcputil.emulator.Machine.PointerType.*;
@@ -64,7 +61,7 @@ public class Machine {
                 case POINTER_MEMORY:
                     memory[pointer]   = data;
                     modified[pointer] = true;
-                    modifiedList.add(pointer);
+                    modifiedSet.add(pointer);
                     break;
                 case POINTER_REGISTER:
                     registers[pointer] = data;
@@ -101,9 +98,13 @@ public class Machine {
     private DeviceManager deviceManager = new DeviceManager();
 
     protected boolean[] modified = new boolean[memory.length];
-    protected List<Character> modifiedList = new ArrayList<Character>();
+    protected Set<Character> modifiedSet = new HashSet<Character>();
 
     private void reset(){
+        for(Character c: modifiedSet){
+            modified[c] = false;
+        }
+        modifiedSet.clear();
         for(int i=0;i<memory.length;i++){
             memory[i] = 0;
         }
@@ -120,7 +121,7 @@ public class Machine {
         lastProgram = program.clone();
         for(char i=0;i<program.length;i++){
             modified[i] = true;
-            modifiedList.add(i);
+            modifiedSet.add(i);
         }
     }
 
@@ -322,7 +323,7 @@ public class Machine {
                     case JSR:
                         memory[--sp] = pc;
                         modified[sp] = true;
-                        modifiedList.add(sp);
+                        modifiedSet.add(sp);
                         pc = a;
                         return;
                     case BRK:
@@ -510,8 +511,8 @@ public class Machine {
     public boolean[] getMask(){
         return this.modified;
     }
-    public List<Character> getTotalModified(){
-        return this.modifiedList;
+    public Set<Character> getTotalModified(){
+        return this.modifiedSet;
     }
     public boolean isModified(int i) {
         return modified[i];

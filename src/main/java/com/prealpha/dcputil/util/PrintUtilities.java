@@ -13,7 +13,7 @@ public class PrintUtilities {
     public static String convertHex(char value){
         final int MAX_LENGTH = 4;
         String converted = Integer.toHexString(value);
-        while(converted.length()<4){
+        while(converted.length()<MAX_LENGTH){
             converted = "0"+converted;
         }
         return "0x"+converted;
@@ -40,7 +40,7 @@ public class PrintUtilities {
         int i=0;
         sb.insert(8+i++,"\n");
         sb.insert(16+i++,"\n");
-        sb.insert(24+i++,"\n");
+        sb.insert(24+i,"\n");
         return sb.toString();
     }
 
@@ -78,16 +78,16 @@ public class PrintUtilities {
         char counter = 0;
         for(int i=0;i<input.length;i++){
             if(i%8==0){
-                sb.append("\n"+convertHex(counter)+":\t");
+                sb.append("\n").append(convertHex(counter)).append(":\t");
             }
-            sb.append(" "+convertHex(input[i]));
+            sb.append(" ").append(convertHex(input[i]));
             counter++;
         }
 
 
         for(int i=0;i<8-counter%8;i++){
             if(counter!=0)
-                sb.append(" "+convertHex((char)0));
+                sb.append(" ").append(convertHex((char) 0));
         }
 
         return sb.toString().substring(1);
@@ -104,16 +104,16 @@ public class PrintUtilities {
             }
 
             if(i%8==0){
-                sb.append("\n"+convertHex((char) (counter+offset))+":\t");
+                sb.append("\n").append(convertHex((char) (counter + offset))).append(":\t");
             }
-            sb.append(space+convertHex(input[i])+space);
+            sb.append(space).append(convertHex(input[i])).append(space);
             counter++;
         }
 
 
         for(int i=0;i<8-counter%8;i++){
             if(counter!=0)
-                sb.append(" "+convertHex((char)0));
+                sb.append(" ").append(convertHex((char) 0));
         }
 
         return sb.toString().substring(1);
@@ -128,7 +128,8 @@ public class PrintUtilities {
 
 
 
-    public static String dump(char[] input, boolean[] mask, List<Character> visitedList,int...highlight){
+    public static String dump(char[] input, boolean[] mask, Set<Character> visitedSet,int...highlight){
+        List<Character> visitedList = new ArrayList<Character>(visitedSet);
         Collections.sort(visitedList);
         Set<Integer> alreadyPrinted  = new HashSet<Integer>();
         StringBuilder toReturn = new StringBuilder();
