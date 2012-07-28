@@ -21,6 +21,8 @@ import java.util.regex.Pattern;
  */
 public class Parser {
     private int counter = 0;
+
+
     private Map<String,Integer> labelToLine = new HashMap<String,Integer>();
     private Map<ValuePack,String> packToLabel = new HashMap<ValuePack, String>();
 
@@ -89,7 +91,7 @@ public class Parser {
             }
         }
 
-        return new PackGroup(operator,valuePacks);
+        return new PackGroup(operator,valuePacks,this.globalLine);
     }
 
     private static final Pattern labelDefinition = Pattern.compile("^:(([a-z]|[A-Z]|_)\\w*)$");

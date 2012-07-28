@@ -11,12 +11,14 @@ import java.util.List;
  * Time: 8:56 AM
  */
 public class PackGroup {
+    public final int line;
     public final Operator.OperatorPack operator;
     public final List<Value.ValuePack> values;
 
-    public PackGroup(Operator.OperatorPack operator, List<Value.ValuePack> values){
+    public PackGroup(Operator.OperatorPack operator, List<Value.ValuePack> values, int line){
         this.operator = operator;
         this.values = values;
+        this.line = line;
     }
 
 }

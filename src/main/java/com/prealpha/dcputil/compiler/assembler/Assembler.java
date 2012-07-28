@@ -6,7 +6,9 @@ import com.prealpha.dcputil.compiler.info.Value.ValuePack;
 import com.prealpha.dcputil.compiler.lexer.Expression;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Ty
@@ -17,9 +19,22 @@ public class Assembler {
     private List<Expression> expressionList;
     private List<Character> charList = new ArrayList<Character>();
 
+    private Map<Integer,Integer> locationToLine = new HashMap<Integer,Integer>();
+
+    public int getLine(int location){
+        if(locationToLine.containsKey(location)){
+            return locationToLine.get(location);
+        }
+        if(location==0){
+            return 0;
+        }
+        return getLine(location-1);
+    }
+
     public char[] assemble(List<PackGroup> packGroups) throws ParserException {
         List<Character> toReturn = new ArrayList<Character>();
         for(PackGroup pg:packGroups){
+            locationToLine.put(toReturn.size(),pg.line);
             toReturn.addAll(assembleExpression(pg));
         }
 
