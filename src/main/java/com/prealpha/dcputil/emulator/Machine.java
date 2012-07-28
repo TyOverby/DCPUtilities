@@ -342,7 +342,6 @@ public class Machine {
                     case HWI:
                         throw new EmulatorException("Operation not accepted"+convertHex(opB),pc);
                 }
-
         }
 
         pb.set(b);
