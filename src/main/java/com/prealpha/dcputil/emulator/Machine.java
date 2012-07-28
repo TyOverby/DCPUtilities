@@ -1,5 +1,6 @@
 package com.prealpha.dcputil.emulator;
 
+import com.prealpha.dcputil.emulator.devices.Device;
 import com.prealpha.dcputil.emulator.devices.DeviceManager;
 
 import java.util.*;
@@ -124,8 +125,11 @@ public class Machine {
             modifiedSet.add(i);
         }
     }
-
     public void step() throws EmulatorException {
+        instruction();
+        this.deviceManager.update(this);
+    }
+    private void instruction() throws EmulatorException {
         char instruction = memory[pc++];
         char opcode   = clear(instruction, A_SIZE+B_SIZE, 0);
         char opA      = clear(instruction, 0, B_SIZE+OP_SIZE);
@@ -334,13 +338,16 @@ public class Machine {
                     case IAS:
                     case FRI:
                     case IAQ:
+                        throw new EmulatorException("Operation not accepted"+convertHex(opB),pc);
                     case HWN:
-                        deviceManager.hwn(this);
+                        pa.set(deviceManager.hwn(this));
                         return;
                     case HWQ:
-
+                        deviceManager.hwq(this,a);
+                        return;
                     case HWI:
-                        throw new EmulatorException("Operation not accepted"+convertHex(opB),pc);
+                        deviceManager.hwi(this,a);
+                        return;
                 }
         }
 
@@ -524,5 +531,9 @@ public class Machine {
     }
     public char getEx(){
         return ex;
+    }
+
+    public int addDevice(Device device){
+        return this.deviceManager.add(device);
     }
 }

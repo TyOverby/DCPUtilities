@@ -7,7 +7,7 @@ import com.prealpha.dcputil.emulator.Machine;
  * Date: 7/21/12
  * Time: 8:11 PM
  */
-interface Device {
+public interface Device {
     public char[] getId();
     public char[] getManufacturer();
     public char   getVersion();

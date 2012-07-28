@@ -1,7 +1,5 @@
 package com.prealpha.dcputil.emulator.devices.lem1802;
 
-import com.prealpha.dcputil.emulator.devices.Lem1802;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,19 +8,33 @@ import java.awt.*;
  * Date: 7/23/12
  * Time: 11:59 PM
  */
-public class SwingScreen extends Lem1802 {
+public class SwingLem1802 extends Lem1802 {
+    private JFrame jFrame;
     private JPanel jPanel;
-    final int pixelSize;
+    private final int pixelSize;
 
-    public SwingScreen(){
-        this.pixelSize = 0;
+    public SwingLem1802(){
+        this(1);
     }
-    public SwingScreen(int size){
+    public SwingLem1802(int size){
         jPanel = new JPanel();
         this.pixelSize = size;
     }
     public JPanel getPanel(){
         return jPanel;
+    }
+
+    public JFrame getWrapped(){
+        if(jFrame==null){
+            jFrame = new JFrame();
+            jFrame.setBounds(0,0,300,300);
+            jFrame.getContentPane().add(jPanel);
+            jPanel.setBounds(0,0,300,300);
+            return jFrame;
+        }
+        else{
+            return jFrame;
+        }
     }
 
     @Override
@@ -34,7 +46,7 @@ public class SwingScreen extends Lem1802 {
 
     public static void main(String... args){
         JFrame jf = new JFrame();
-        SwingScreen ss = new SwingScreen(3);
+        SwingLem1802 ss = new SwingLem1802(3);
         jf.getContentPane().add(ss.getPanel());
         ss.getPanel().setBounds(0,0,200,200);
         jf.setBounds(0,0,200,200);

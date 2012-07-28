@@ -5,6 +5,8 @@ import com.prealpha.dcputil.defaults.BasicSystem;
 import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.StepEvent;
+import com.prealpha.dcputil.emulator.devices.lem1802.Lem1802;
+import com.prealpha.dcputil.emulator.devices.lem1802.SwingLem1802;
 import com.prealpha.dcputil.ui.layout.TyLayout;
 
 import javax.swing.*;
@@ -59,9 +61,7 @@ public class BasicDebuggerFrame {
 		frame.getContentPane().setLayout(new TyLayout());
 
         try {
-            // Set cross-platform Java L&F (also called "Metal")
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception e){
             // Don't do anything, we don't really care about the look and feel.
@@ -203,10 +203,7 @@ public class BasicDebuggerFrame {
 		btnStep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
                 try {
-                    System.out.println("enter");
                     BasicDebuggerFrame.this.system.step();
-                    System.out.println("exit");
-                    //System.err.println((int)BasicDebuggerFrame.this.system.machine.getRegisters()[0]);
                 } catch (EmulatorException e) {
                     e.printStackTrace();
                 }
@@ -216,6 +213,9 @@ public class BasicDebuggerFrame {
 		btnCompile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
                 BasicDebuggerFrame.this.system = new BasicSystem();
+                    SwingLem1802 lem = new SwingLem1802();
+                BasicDebuggerFrame.this.system.machine.addDevice(lem);
+                lem.getWrapped().setVisible(true);
                 try {
 					BasicDebuggerFrame.this.system.load(BasicDebuggerFrame.this.codeTextArea.getText());
 					onTick(BasicDebuggerFrame.this.system);

@@ -1,6 +1,7 @@
-package com.prealpha.dcputil.emulator.devices;
+package com.prealpha.dcputil.emulator.devices.lem1802;
 
 import com.prealpha.dcputil.emulator.Machine;
+import com.prealpha.dcputil.emulator.devices.Device;
 
 /**
  * User: Ty
@@ -155,7 +156,7 @@ public abstract class Lem1802 implements Device {
     @Override
     public char[] getId() {
         final int id = 0x7349f615;
-        final char first  = (char) (id<<16)>>16;
+        final char first  = (char) (id & 0xffff);
         final char second = (char) (id>>16);
         final char[] toReturn = {first,second};
         return toReturn;
@@ -164,7 +165,7 @@ public abstract class Lem1802 implements Device {
     @Override
     public char[] getManufacturer() {
         final int manufacturer = 0x1c6c8b36 ;
-        final char first  = (char) (manufacturer<<16)>>16;
+        final char first  = (char) (manufacturer&0xffff);
         final char second = (char) (manufacturer>>16);
         final char[] toReturn = {first,second};
         return toReturn;

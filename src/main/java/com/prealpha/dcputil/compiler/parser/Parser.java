@@ -24,6 +24,8 @@ public class Parser {
     private Map<String,Integer> labelToLine = new HashMap<String,Integer>();
     private Map<ValuePack,String> packToLabel = new HashMap<ValuePack, String>();
 
+    private int globalLine = 0;
+
     public List<PackGroup> parse(List<Expression> expressions) throws ParserException {
         this.counter=0;
         this.labelToLine.clear();
@@ -56,7 +58,7 @@ public class Parser {
         int start = 0;
         Token[] tokens = expression.tokens;
         Token first = expression.tokens[0];
-        int line = first.lineNum;
+        this.globalLine = first.lineNum;
 
         OperatorPack operator = null;
         while(operator==null && start<tokens.length){
@@ -66,7 +68,7 @@ public class Parser {
         if(operator == null){
             return null;
         }
-        operator.setLineNum(line);
+        operator.setLineNum(this.globalLine);
         if(!operator.is("DAT")){
             counter++;
         }
@@ -75,13 +77,13 @@ public class Parser {
         for(int i=start, k=1; i<tokens.length;i++,k++){
             if(operator.is("DAT")){
                 counter++;
-                ValuePack vp = new ValuePack((char)0xffff,0,"data-literal").withData(parseSingular(tokens[i].orig,line));
-                vp.setLineNum(line);
+                ValuePack vp = new ValuePack((char)0xffff,0,"data-literal").withData(parseSingular(tokens[i].orig,this.globalLine));
+                vp.setLineNum(this.globalLine);
                 valuePacks.add(vp);
             }
             else{
                 ValuePack vp = getValue(tokens[i],k);
-                vp.setLineNum(line);
+                vp.setLineNum(this.globalLine);
                 valuePacks.add(vp);
             }
         }
@@ -222,8 +224,13 @@ public class Parser {
     private void register(ValuePack vp, String label){
         packToLabel.put(vp, label);
     }
-    private void register(String label, int line){
-        labelToLine.put(label,line);
+    private void register(String label, int line) throws ParserException {
+        if(!labelToLine.containsKey(label)){
+            labelToLine.put(label,line);
+        }
+        else{
+            throw new ParserException("Duplicate label: \""+label+"\"",this.globalLine);
+        }
     }
 
     private Character getInner(String input,int line) throws ParserException {

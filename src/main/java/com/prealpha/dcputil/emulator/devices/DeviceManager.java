@@ -13,8 +13,13 @@ import java.util.List;
 public class DeviceManager {
     private List<Device> devices = new ArrayList<Device>();
 
-    public void hwn(Machine machine){
-        machine.getRegisters()[0]= (char) devices.size();
+    public int add(Device device){
+        this.devices.add(device);
+        return this.devices.size()-1;
+    }
+
+    public char hwn(Machine machine){
+        return (char) devices.size();
     }
 
     public void hwq(Machine machine, char dev){
