@@ -35,7 +35,11 @@ public class Lexer {
     public List<Expression> lexLine(String line, int linNum){
         line = line.trim();
         line = line.replace(","," ");
-        line = line.split(";")[0];
+        if (line.equals(";")) {
+            line = "";
+        } else {
+            line = line.split(";")[0];
+        }
 
         String[] segments = line.split("\\|");
         List<Expression> expressions = new ArrayList<Expression>();
