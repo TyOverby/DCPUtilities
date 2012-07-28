@@ -139,9 +139,11 @@ public class Machine {
         Pointer pa = getPointer(opA, offset, true);
         offset+= getOffset(opA);
         Pointer pb = getPointer(opB, offset, false);
-        offset+= getOffset(opB);
+        if(opcode!=0)
+            offset+= getOffset(opB);
 
         pc += offset;
+
 
         char a = pa.get();
         char b = pb.get();
@@ -346,6 +348,7 @@ public class Machine {
                         deviceManager.hwq(this,a);
                         return;
                     case HWI:
+                        System.out.println("HWI");
                         deviceManager.hwi(this,a);
                         return;
                 }

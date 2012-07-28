@@ -82,7 +82,8 @@ public class Parser {
                 valuePacks.add(vp);
             }
             else{
-                ValuePack vp = getValue(tokens[i],k);
+                boolean isA = ((i-tokens.length+1)==0);
+                ValuePack vp = getValue(tokens[i],isA);
                 vp.setLineNum(this.globalLine);
                 valuePacks.add(vp);
             }
@@ -132,7 +133,7 @@ public class Parser {
     private static final Pattern labelRef                = Pattern.compile("^(([a-z]|[A-Z]|_)\\w*)$");
     private static final Pattern pointerLabelRef         = Pattern.compile("^\\[(([a-z]|[A-Z]|_)\\w*)\\]$");
 
-    private ValuePack getValue(Token token, int position) throws ParserException {
+    private ValuePack getValue(Token token, boolean isA) throws ParserException {
         String original = token.orig.trim().replace(" ","").replace("\t","");
         int line  = token.lineNum;
 
@@ -180,7 +181,7 @@ public class Parser {
         Matcher nextM = literal.matcher(original);
         if(nextM.matches()){
             char next = parseSingular(nextM.group(1),line);
-            if ((next == 0xffff || next <= 30) && position == 2){
+            if ((next == 0xffff || next <= 30) && isA){
                 return Value.values.get(""+(int)next).clone();
             }
             else{

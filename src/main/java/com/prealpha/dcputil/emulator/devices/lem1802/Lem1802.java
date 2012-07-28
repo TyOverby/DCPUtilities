@@ -215,8 +215,8 @@ public abstract class Lem1802 implements Device {
             font = new char[]{machine.getMemory()[displacement],machine.getMemory()[displacement+1]};
         }
         else{
-            int displacement = letterId*2;
-            font = new char[]{machine.getMemory()[displacement],machine.getMemory()[displacement+1]};
+            char displacement = (char) (letterId*2);
+            font = new char[]{defaultFont[displacement],defaultFont[displacement+1]};
         }
 
         this.drawLetter(videoPos-this.screenLocation,font);
@@ -225,7 +225,10 @@ public abstract class Lem1802 implements Device {
     @Override
     public void update(Machine machine) {
        if(this.isConnected){
+           //System.out.println("clearing");
+           this.clear();
            for(char i=this.screenLocation;i<(this.screenLocation+386);i++){
+               //System.out.println("printing");
                 print(i,machine);
            }
        }
@@ -235,6 +238,7 @@ public abstract class Lem1802 implements Device {
     private static final int Y_RES = 12;
 
     abstract public void drawPixel(int x, int y);
+    abstract public void clear();
 
     public void drawLetter(int position, char[] font){
         int groupX = getX(position,X_RES);

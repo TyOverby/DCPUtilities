@@ -35,7 +35,10 @@ public class DeviceManager {
     }
 
     public void hwi(Machine machine, char device){
-        devices.get(device).hwi(machine);
+        if(!(device>=devices.size())){
+            devices.get(device).hwi(machine);
+        }
+        System.err.println("HWI for device larger than the device size."+"size: "+devices.size()+" dev: "+device);
     }
 
     public void update(Machine machine){

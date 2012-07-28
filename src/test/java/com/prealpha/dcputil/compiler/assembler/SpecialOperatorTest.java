@@ -63,5 +63,10 @@ public class SpecialOperatorTest extends CompilerTest{
            char[] expected = {0x0240};
            assertEqual(expected,compile(input));
        }
+       {
+           String input = "HWI 0";
+           char[] expected = {0x8640};
+           assertEqual(expected,compile(input));
+       }
    }
 }

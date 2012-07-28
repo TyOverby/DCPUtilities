@@ -186,6 +186,7 @@ public class BasicDebuggerFrame {
 		JButton btnStop = new JButton("Stop");
 		btnStop.setBounds(297, 0, 89, 23);
 		buttonsPane.add(btnStop);
+
 		btnRun.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -194,7 +195,7 @@ public class BasicDebuggerFrame {
 						public void onStep(Machine machine) {
 							BasicDebuggerFrame.this.onTick(BasicDebuggerFrame.this.system);							
 						}});
-					BasicDebuggerFrame.this.system.runUntilTime(2000);
+					BasicDebuggerFrame.this.system.run();
 				} catch (EmulatorException e1) {
 					e1.printStackTrace();
 				}
@@ -213,7 +214,7 @@ public class BasicDebuggerFrame {
 		btnCompile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
                 BasicDebuggerFrame.this.system = new BasicSystem();
-                    SwingLem1802 lem = new SwingLem1802();
+                    SwingLem1802 lem = new SwingLem1802(3);
                 BasicDebuggerFrame.this.system.machine.addDevice(lem);
                 lem.getWrapped().setVisible(true);
                 try {

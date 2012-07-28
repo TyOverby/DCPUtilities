@@ -44,6 +44,13 @@ public class SwingLem1802 extends Lem1802 {
         g.fillRect(x*pixelSize,y*pixelSize,pixelSize,pixelSize);
     }
 
+    @Override
+    public void clear() {
+        Graphics g = jPanel.getGraphics();
+        g.setColor(Color.white);
+        g.fillRect(0,0,this.jPanel.getWidth(),this.jPanel.getHeight());
+    }
+
     public static void main(String... args){
         JFrame jf = new JFrame();
         SwingLem1802 ss = new SwingLem1802(3);

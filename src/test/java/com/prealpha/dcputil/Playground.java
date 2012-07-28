@@ -7,24 +7,24 @@ import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.EmulatorException;
 import com.prealpha.dcputil.emulator.StepEvent;
 
+import static com.prealpha.dcputil.util.PrintUtilities.dump;
+
 /**
  * User: Ty
  * Date: 7/9/12
  * Time: 5:22 AM
  */
 public class Playground extends CompilerTest{
+    public void test(){
+        {
+            String input = "HWI 0";
+            char[] expected = {8640};
+            System.out.println(dump(compile(input)));
+            //assertEqual(expected,compile(input));
+        }
+    }
 
     public static  void main(String... args) throws EmulatorException, ParserException {
-        BasicSystem bs = new BasicSystem();
-        bs.load(":loop | ADD A 1 | SET PC loop");
-        bs.machine.addStepEvent(new StepEvent() {
-            private int count = 0;
-            @Override
-            public void onStep(Machine m) {
-                System.out.println((int)m.getPc()+": "+count++ +"->"+(int)m.getRegisters()[0]);
-            }
-        });
-
-        bs.run();
+        new Playground().test();
     }
 }
