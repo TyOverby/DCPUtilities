@@ -45,10 +45,10 @@ public class SwingLem1802 extends Lem1802 {
     }
 
     @Override
-    public void clear() {
+    public void clear(int x,int y) {
         Graphics g = jPanel.getGraphics();
-        g.setColor(Color.white);
-        g.fillRect(0,0,this.jPanel.getWidth(),this.jPanel.getHeight());
+        g.setColor(Color.red);
+        g.fillRect(x*4*pixelSize,y*8*pixelSize,4*pixelSize,8*pixelSize);
     }
 
     public static void main(String... args){

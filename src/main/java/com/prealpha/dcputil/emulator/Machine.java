@@ -63,6 +63,7 @@ public class Machine {
                     memory[pointer]   = data;
                     modified[pointer] = true;
                     modifiedSet.add(pointer);
+                    justModified.add(pointer);
                     break;
                 case POINTER_REGISTER:
                     registers[pointer] = data;
@@ -99,6 +100,8 @@ public class Machine {
     private DeviceManager deviceManager = new DeviceManager();
 
     protected boolean[] modified = new boolean[memory.length];
+
+    protected Set<Character> justModified = new HashSet<Character>();
     protected Set<Character> modifiedSet = new HashSet<Character>();
 
     private void reset(){
@@ -126,6 +129,7 @@ public class Machine {
         }
     }
     public void step() throws EmulatorException {
+        this.justModified.clear();
         instruction();
         this.deviceManager.update(this);
     }
@@ -522,6 +526,9 @@ public class Machine {
     }
     public Set<Character> getTotalModified(){
         return this.modifiedSet;
+    }
+    public Set<Character> getJustModified(){
+        return this.justModified;
     }
     public boolean isModified(int i) {
         return modified[i];

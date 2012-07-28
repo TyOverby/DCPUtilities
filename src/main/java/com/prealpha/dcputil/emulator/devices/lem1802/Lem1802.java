@@ -226,11 +226,17 @@ public abstract class Lem1802 implements Device {
     public void update(Machine machine) {
        if(this.isConnected){
            //System.out.println("clearing");
-           this.clear();
-           for(char i=this.screenLocation;i<(this.screenLocation+386);i++){
-               //System.out.println("printing");
-                print(i,machine);
+           //this.clear();
+           for(char i:machine.getJustModified()){
+               if(i>=this.screenLocation && i<=this.screenLocation+380){
+                   clear(getX(i-this.screenLocation,X_RES),getY(i-this.screenLocation,X_RES));
+                   print(i,machine);
+               }
            }
+//           for(char i=this.screenLocation;i<(this.screenLocation+386);i++){
+//                //System.out.println("printing");
+//                print(i,machine);
+//           }
        }
     }
 
@@ -238,7 +244,7 @@ public abstract class Lem1802 implements Device {
     private static final int Y_RES = 12;
 
     abstract public void drawPixel(int x, int y);
-    abstract public void clear();
+    abstract public void clear(int x, int y);
 
     public void drawLetter(int position, char[] font){
         int groupX = getX(position,X_RES);
