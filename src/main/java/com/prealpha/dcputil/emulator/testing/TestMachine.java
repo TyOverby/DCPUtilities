@@ -4,6 +4,9 @@ import com.prealpha.dcputil.compiler.defaults.BasicAssembler;
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.EmulatorException;
+import com.prealpha.dcputil.emulator.devices.pipeline.Pipeline;
+
+import java.util.Queue;
 
 /**
  * User: Ty
@@ -12,6 +15,12 @@ import com.prealpha.dcputil.emulator.EmulatorException;
  */
 public class TestMachine extends Machine {
     private final BasicAssembler assembler = new BasicAssembler();
+
+    private Pipeline pipeline = new Pipeline();
+
+    public TestMachine(){
+        this.addDevice(pipeline);
+    }
 
     public void load(String program) throws ParserException {
         char[] p = assembler.assemble(program);
@@ -29,5 +38,9 @@ public class TestMachine extends Machine {
                 throw new EndOfMemoryException();
             }
         }
+    }
+
+    public Queue getQueue(){
+        return this.pipeline.getQueue();
     }
 }
