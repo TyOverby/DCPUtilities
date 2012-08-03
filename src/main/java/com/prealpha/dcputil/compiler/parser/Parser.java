@@ -125,15 +125,15 @@ public class Parser {
 
 
 
-    private static final Pattern register                = Pattern.compile("^(A|B|C|X|Y|Z|I|J|SP|PC|EX)$");
-    private static final Pattern pointerRegister         = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\]$");
-    private static final Pattern pointerRegisterPlusNext = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\+((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
-    private static final Pattern stackOperations         = Pattern.compile("^((PUSH)|(POP)|(PEEK))$");
-    private static final Pattern pointerNextPlusRegister = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\+(A|B|C|X|Y|Z|I|J|SP)\\]$");
-    private static final Pattern literal                 = Pattern.compile("^((0x\\w+)|(\\d+)|(0b(1|0)+))$");
-    private static final Pattern pointerNext             = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
-    private static final Pattern labelRef                = Pattern.compile("^(([a-z]|[A-Z]|_)\\w*)$");
-    private static final Pattern pointerLabelRef         = Pattern.compile("^\\[(([a-z]|[A-Z]|_)\\w*)\\]$");
+    public static final Pattern register                = Pattern.compile("^(A|B|C|X|Y|Z|I|J|SP|PC|EX)$");
+    public static final Pattern pointerRegister         = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\]$");
+    public static final Pattern pointerRegisterPlusNext = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\+((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
+    public static final Pattern stackOperations         = Pattern.compile("^((PUSH)|(POP)|(PEEK))$");
+    public static final Pattern pointerNextPlusRegister = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\+(A|B|C|X|Y|Z|I|J|SP)\\]$");
+    public static final Pattern literal                 = Pattern.compile("^((0x\\w+)|(\\d+)|(0b(1|0)+))$");
+    public static final Pattern pointerNext             = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$");
+    public static final Pattern labelRef                = Pattern.compile("^(([a-z]|[A-Z]|_)\\w*)$");
+    public static final Pattern pointerLabelRef         = Pattern.compile("^\\[(([a-z]|[A-Z]|_)\\w*)\\]$");
 
     private ValuePack getValue(Token token, boolean isA) throws ParserException {
         String original = token.orig.trim().replace(" ","").replace("\t","");
