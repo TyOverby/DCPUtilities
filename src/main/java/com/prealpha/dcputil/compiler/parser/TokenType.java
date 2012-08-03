@@ -21,7 +21,9 @@ import java.util.regex.Pattern;
         LITERAL(Parser.literal),
         POINTER_NEXT(Parser.pointerNext),
         LABEL_REF(Parser.labelRef),
-        POINTER_LABEL_REF(Parser.pointerLabelRef);
+        POINTER_LABEL_REF(Parser.pointerLabelRef),
+
+        UNKNOWN(Pattern.compile(""));
 
 
 
@@ -35,11 +37,11 @@ import java.util.regex.Pattern;
 
         public static TokenType getType(Token token){
             for(TokenType t:TokenType.values()){
-                if(t.matches(token.orig)){
+                if(t.matches(token.orig.trim())){
                     return t;
                 }
             }
-            return null;
+            return UNKNOWN;
         }
 
     }
