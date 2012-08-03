@@ -8,10 +8,14 @@ package com.prealpha.dcputil.compiler.lexer;
 public class Token {
     public final String orig;
     public final int lineNum;
+    public final int charStart;
+    public final int charEnd;
 
-    public Token(String orig, int lineNum){
+    public Token(String orig, int lineNum, int charStart, int charEnd){
         this.orig = orig;
         this.lineNum = lineNum;
+        this.charStart = charStart;
+        this.charEnd   = charEnd;
     }
 
     public String toString(){

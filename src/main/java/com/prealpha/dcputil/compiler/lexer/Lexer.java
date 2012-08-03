@@ -47,11 +47,12 @@ public class Lexer {
             List<Token> tokens = new ArrayList<Token>(3);
 
             Matcher matcher = section.matcher(s);
+            int total = 0;
             int start = 0;
             while(matcher.find(start)){
                 String token = matcher.group(1).trim();
                 start = matcher.end(1);
-                tokens.add(new Token(token,linNum));
+                tokens.add(new Token(token,linNum,matcher.start(1),matcher.end(1)));
             }
 
             if(tokens.size()>0){
