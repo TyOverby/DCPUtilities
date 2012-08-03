@@ -224,6 +224,10 @@ public class Parser {
         throw new ParserException("Unable to parse token: \""+token.orig+"\" on line: "+line,line);
     }
 
+    public char getType(Token token) throws ParserException {
+        return getValue(token,true).getCode();
+    }
+
     private void register(ValuePack vp, String label){
         packToLabel.put(vp, label);
     }
