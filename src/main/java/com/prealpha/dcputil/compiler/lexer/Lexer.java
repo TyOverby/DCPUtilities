@@ -52,7 +52,8 @@ public class Lexer {
             while(matcher.find(start)){
                 String token = matcher.group(1).trim();
                 start = matcher.end(1);
-                tokens.add(new Token(token,linNum,matcher.start(1),matcher.end(1)));
+                int charS = matcher.start(1);
+                tokens.add(new Token(token,linNum,charS,charS+token.length()));
             }
 
             if(tokens.size()>0){

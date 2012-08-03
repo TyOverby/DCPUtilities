@@ -1,2 +1,1 @@
-DCPUtilities
-============
+((SET)|(ADD)|(SUB)|(MUL)|(MLI)|(DIV)|(DVI)|(MOD)|(MDI)|(AND)|(BOR)|(XOR)|(SHR)|(ASR)|(SHL)|(IFB)|(IFC)|(IFE)|(IFN)|(IFG)|(IFA)|(IFL)|(IFU)|(ADX)|(SBX)|(STI)|(STD)|(JSR)|(INT)|(IAG)|(IAS)|(RFI)|(IAQ)|(HWN)|(HWQ)|(HWI))
