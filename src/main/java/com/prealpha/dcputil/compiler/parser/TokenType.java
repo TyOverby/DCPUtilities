@@ -10,6 +10,9 @@ import java.util.regex.Pattern;
  * Time: 9:01 PM
  */
     public enum TokenType{
+
+
+        OPERATION(Parser.operation),
         REGISTER(Parser.register),
         POINTER_REGISTER(Parser.pointerRegister),
         POINTER_REGISTER_PLUS_NEXT(Parser.pointerRegisterPlusNext),
@@ -19,6 +22,8 @@ import java.util.regex.Pattern;
         POINTER_NEXT(Parser.pointerNext),
         LABEL_REF(Parser.labelRef),
         POINTER_LABEL_REF(Parser.pointerLabelRef);
+
+
 
         private Pattern pattern;
         private TokenType(Pattern pattern){
