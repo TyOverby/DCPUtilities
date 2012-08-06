@@ -464,38 +464,22 @@ public class Machine {
 
 
 
-    public void run() throws EmulatorException {
+    public void run(boolean fireEvents, HaltConditions... conditions) throws EmulatorException {
         isRunning = true;
         while(isRunning){
             this.step();
-            fireEvents();
-        }
-    }
 
-    public void runUntilPosition(int codePoint) throws EmulatorException {
-        isRunning = true;
-        while(isRunning){
-            this.step();
-            fireEvents();
-            if(this.pc >= codePoint){
-                this.isRunning = false;
+            for(HaltConditions cond:conditions){
+                if(cond.isMet(this)){
+                    isRunning = false;
+                }
+            }
+
+            if(fireEvents){
+                fireEvents();
             }
         }
-    }
-
-    public void runUntilTime(int millis) throws EmulatorException {
-        Timer timer = new Timer(true);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                Machine.this.stop();
-            }
-        },millis);
-        this.run();
-    }
-
-    public void runUntilOverflow() throws EmulatorException {
-        this.runUntilPosition(0xfffa);
+        fireEvents();
     }
 
     public void stop(){

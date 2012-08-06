@@ -2,21 +2,21 @@ package com.prealpha.dcputil.ui;
 
 import com.prealpha.dcputil.compiler.parser.ParserException;
 import com.prealpha.dcputil.defaults.BasicSystem;
-import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.EmulatorException;
+import com.prealpha.dcputil.emulator.HaltConditions;
+import com.prealpha.dcputil.emulator.Machine;
 import com.prealpha.dcputil.emulator.StepEvent;
-import com.prealpha.dcputil.emulator.devices.lem1802.Lem1802;
 import com.prealpha.dcputil.emulator.devices.lem1802.SwingLem1802;
 import com.prealpha.dcputil.ui.layout.TyLayout;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static com.prealpha.dcputil.util.PrintUtilities.convertHex;
 import static com.prealpha.dcputil.util.PrintUtilities.dump;
-import javax.swing.border.TitledBorder;
 
 public class BasicDebuggerFrame {
 
@@ -195,7 +195,7 @@ public class BasicDebuggerFrame {
 						public void onStep(Machine machine) {
 							BasicDebuggerFrame.this.onTick(BasicDebuggerFrame.this.system);							
 						}});
-					BasicDebuggerFrame.this.system.run();
+					BasicDebuggerFrame.this.system.run(false,HaltConditions.NOOP, HaltConditions.BREAK,HaltConditions.NEAR_END);
 				} catch (EmulatorException e1) {
 					e1.printStackTrace();
 				}
