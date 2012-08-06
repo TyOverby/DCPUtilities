@@ -33,7 +33,7 @@ public class Lexer {
 
     private static final Pattern section = Pattern.compile("(:?\\[? *\\w+\\+?\\w* *\\]?)([;.*]?)");
     public List<Expression> lexLine(String line, int linNum){
-        line = line.trim();
+        //line = line.trim();
         line = line.replace(","," ");
         if (line.equals(";")) {
             line = "";
@@ -43,24 +43,35 @@ public class Lexer {
 
         String[] segments = line.split("\\|");
         List<Expression> expressions = new ArrayList<Expression>();
+        int total = 0;
         for(String s:segments){
             List<Token> tokens = new ArrayList<Token>(3);
 
             Matcher matcher = section.matcher(s);
-            int total = 0;
-            int start = 0;
+
+            int start = firstAlphaNumeric(s);
             while(matcher.find(start)){
                 String token = matcher.group(1).trim();
                 start = matcher.end(1);
-                int charS = matcher.start(1);
+                int charS = matcher.start(1)+total;
                 tokens.add(new Token(token,linNum,charS,charS+token.length()));
             }
 
             if(tokens.size()>0){
                 expressions.add(new Expression(tokens.toArray(new Token[tokens.size()])));
             }
+            total+=s.length()+1;
         }
         return expressions;
+    }
+
+    private int firstAlphaNumeric(String s){
+        for(int i=0;i<s.length();i++){
+            if(!Character.isWhitespace(s.charAt(i))){
+                return i;
+            }
+        }
+        return 0;
     }
 }
 
