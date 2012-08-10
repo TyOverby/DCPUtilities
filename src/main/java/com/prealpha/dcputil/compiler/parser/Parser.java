@@ -138,6 +138,7 @@ public class Parser {
     public static final Pattern pointerNextPlusRegister = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\+(A|B|C|X|Y|Z|I|J|SP)\\]$",Pattern.CASE_INSENSITIVE);
     public static final Pattern literal                 = Pattern.compile("^((0x\\w+)|(\\d+)|(0b(1|0)+))$",Pattern.CASE_INSENSITIVE);
     public static final Pattern pointerNext             = Pattern.compile("^\\[((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$",Pattern.CASE_INSENSITIVE);
+    public static final Pattern label                   = Pattern.compile("^(:([a-z]|[A-Z]|_)\\w*)$",Pattern.CASE_INSENSITIVE);
     public static final Pattern labelRef                = Pattern.compile("^(([a-z]|[A-Z]|_)\\w*)$",Pattern.CASE_INSENSITIVE);
     public static final Pattern pointerLabelRef         = Pattern.compile("^\\[(([a-z]|[A-Z]|_)\\w*)\\]$",Pattern.CASE_INSENSITIVE);
 

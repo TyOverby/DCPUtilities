@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
         POINTER_NEXT_PLUS_REGISTER(Parser.pointerNextPlusRegister),
         LITERAL(Parser.literal),
         POINTER_NEXT(Parser.pointerNext),
+        LABEL(Parser.label),
         LABEL_REF(Parser.labelRef),
         POINTER_LABEL_REF(Parser.pointerLabelRef),
 
