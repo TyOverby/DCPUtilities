@@ -130,7 +130,7 @@ public class Parser {
                                                                           "(SHL)|(IFB)|(IFC)|(IFE)|(IFN)|(IFG)|(IFA)|" +
                                                                           "(IFL)|(IFU)|(ADX)|(SBX)|(STI)|(STD)|(JSR)|" +
                                                                           "(INT)|(IAG)|(IAS)|(RFI)|(IAQ)|(HWN)|(HWQ)|" +
-                                                                          "(HWI))",Pattern.CASE_INSENSITIVE);
+                                                                          "(HWI)|(BRK))",Pattern.CASE_INSENSITIVE);
     public static final Pattern register                = Pattern.compile("^(A|B|C|X|Y|Z|I|J|SP|PC|EX)$",Pattern.CASE_INSENSITIVE);
     public static final Pattern pointerRegister         = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\]$",Pattern.CASE_INSENSITIVE);
     public static final Pattern pointerRegisterPlusNext = Pattern.compile("^\\[(A|B|C|X|Y|Z|I|J|SP)\\+((0x\\w+)|(\\d+)|(0b(1|0)+))\\]$",Pattern.CASE_INSENSITIVE);
